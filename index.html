@@ -44,6 +44,7 @@ body{
   background-size:22px 22px;
   min-height:100vh;
 }
+h1,h2,h3,.jua,.bubble{word-break:keep-all}
 h1,h2,h3,.jua{font-family:"Jua","Gowun Dodum",sans-serif;font-weight:400;letter-spacing:.01em}
 button{font:inherit;color:inherit;cursor:pointer}
 .wrap{max-width:960px;margin:0 auto;padding:16px 16px 64px}
@@ -65,7 +66,8 @@ nav.tabs a{
 nav.tabs a[aria-current="page"]{background:var(--accent);color:#fff}
 @media (max-width:720px){
   .top-inner{flex-wrap:wrap}
-  nav.tabs{margin-left:0;width:100%}
+  nav.tabs{margin-left:0;width:100%;order:3}
+  .mode-chip{margin-left:auto}
 }
 
 /* ---------- retro window card (PPT style) ---------- */
@@ -94,7 +96,7 @@ mark{background:var(--accent-soft);color:inherit;padding:0 3px;border-radius:4px
 b.a{color:var(--agA)} b.b{color:#B07E00}
 
 .btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;
   font-family:"Jua";font-size:17px;padding:10px 18px;min-height:46px;
   border:2px solid var(--line);border-radius:14px;background:var(--panel-2);
   box-shadow:3px 3px 0 var(--line);transition:transform .08s,box-shadow .08s;
@@ -249,6 +251,71 @@ table.tbl{width:100%;border-collapse:collapse;background:#fff;border:2px solid v
 .prog{height:10px;border:2px solid var(--line);border-radius:999px;overflow:hidden;background:#fff;margin-bottom:6px}
 .prog i{display:block;height:100%;background:var(--accent);transition:width .3s}
 
+/* ---------- mode start ---------- */
+.start-hero{text-align:center}
+.start-hero h1{font-size:clamp(28px,6.5vw,46px);line-height:1.2;margin:8px 0}
+.start-chars{display:flex;justify-content:center;align-items:flex-end;gap:4px;margin:8px 0 0}
+.start-chars img{width:min(34vw,170px);height:auto}
+.start-chars img:first-child{animation:bob 2.4s ease-in-out infinite}
+.start-chars img:last-child{animation:bob 2.4s ease-in-out .6s infinite}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+@media (max-width:620px){.modes{grid-template-columns:1fr}}
+.mode-card{
+  text-align:left;border:3px solid var(--line);border-radius:20px;padding:16px;background:var(--panel-2);
+  box-shadow:5px 5px 0 var(--line);display:flex;gap:12px;align-items:center;transition:transform .1s;
+}
+.mode-card:active{transform:translate(3px,3px);box-shadow:2px 2px 0 var(--line)}
+.mode-card img{width:96px;height:auto;flex:none}
+.mode-card h2{margin:0;font-size:28px}
+.mode-card .lv{font-family:"Jua";font-size:16px;display:inline-block;border-radius:999px;padding:0 10px;color:#fff;margin-bottom:4px}
+.mode-card.jr .lv{background:#5B9BE0}
+.mode-card.sr .lv{background:var(--accent)}
+.mode-card p{margin:4px 0 0;font-size:14px;color:var(--ink-2)}
+.mode-chip{flex:none;font-family:"Jua";font-size:14px;border:2px solid var(--line);border-radius:999px;padding:3px 10px;background:#fff}
+.icon-btn{flex:none;width:38px;height:38px;border:2px solid var(--line);border-radius:50%;background:var(--panel);font-size:18px;display:grid;place-items:center;padding:0}
+
+/* ---------- character guide ---------- */
+.guide{display:flex;align-items:flex-end;gap:10px;margin:16px 0 -6px}
+.guide img{width:92px;height:auto;flex:none}
+.guide .bubble{
+  position:relative;background:#fff;border:2px solid var(--line);border-radius:16px;padding:10px 14px;
+  font-family:"Jua";font-size:17px;line-height:1.45;margin-bottom:18px;box-shadow:3px 3px 0 var(--line);
+}
+.guide .bubble::before{content:"";position:absolute;left:-11px;bottom:14px;border:9px solid transparent;border-right-color:var(--line);border-left:0}
+.guide .bubble::after{content:"";position:absolute;left:-7px;bottom:16px;border:7px solid transparent;border-right-color:#fff;border-left:0}
+.hero-chars{display:flex;align-items:flex-end;flex:none}
+.hero-chars img{width:min(30vw,150px);height:auto}
+.fb-row{display:flex;gap:10px;align-items:center}
+.fb-row img{width:64px;height:auto;flex:none}
+
+/* ---------- big stamp overlay ---------- */
+.ov{position:fixed;inset:0;z-index:100;display:none;place-items:center;background:rgba(59,42,47,.72);backdrop-filter:blur(3px);padding:16px}
+.ov.show{display:grid}
+.ov canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.ov-card{position:relative;width:min(92vw,440px);text-align:center}
+.big-stamp{
+  width:min(72vw,300px);aspect-ratio:1;margin:0 auto;border-radius:50%;
+  border:10px solid #D7263D;outline:4px solid #D7263D;outline-offset:-22px;
+  background:rgba(255,255,255,.93);color:#D7263D;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:"Jua";transform:rotate(-12deg);opacity:0;
+}
+.ov.show .big-stamp{animation:slam .5s cubic-bezier(.3,1.6,.5,1) .1s forwards}
+@keyframes slam{0%{transform:scale(3.2) rotate(-30deg);opacity:0}55%{transform:scale(.9) rotate(-10deg);opacity:1}100%{transform:scale(1) rotate(-12deg);opacity:1}}
+.big-stamp .l1{font-size:clamp(20px,6vw,28px)}
+.big-stamp .l2{font-size:clamp(40px,13vw,62px);line-height:1}
+.big-stamp .l3{font-size:clamp(18px,5vw,24px);margin-top:4px}
+.ov-chars{display:flex;justify-content:space-between;margin-top:-40px;pointer-events:none}
+.ov-chars img{width:min(32vw,140px);height:auto;opacity:0}
+.ov.show .ov-chars img{animation:popUp .5s cubic-bezier(.3,1.6,.5,1) .55s forwards}
+.ov.show .ov-chars img+img{animation-delay:.7s}
+@keyframes popUp{from{transform:translateY(60px) scale(.6);opacity:0}to{transform:none;opacity:1}}
+.ov-msg{color:#fff;font-family:"Jua";font-size:22px;text-shadow:0 2px 0 var(--ink);margin:6px 0 12px}
+.ov .btn-row{justify-content:center}
+body[data-mode="senior"] .jr-only{display:none}
+.shake{animation:shake .45s .5s}
+@keyframes shake{20%{transform:translate(-8px,4px)}40%{transform:translate(7px,-5px)}60%{transform:translate(-5px,3px)}80%{transform:translate(3px,-2px)}}
+
 footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -260,18 +327,36 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
       <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3C14 12 8 18 8 25a12 12 0 0 0 24 0c0-7-6-13-12-22z" fill="#B3263A" stroke="#3B2A2F" stroke-width="2.5"/><circle cx="16" cy="25" r="1.8" fill="#3B2A2F"/><circle cx="24" cy="25" r="1.8" fill="#3B2A2F"/><path d="M17 29q3 2.5 6 0" stroke="#3B2A2F" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
       ABO 탐험
     </a>
-    <nav class="tabs" aria-label="게임 메뉴">
-      <a href="#home">홈</a>
-      <a href="#principle">① 원리</a>
-      <a href="#experiment">② 가상 실험</a>
-      <a href="#transfusion">③ 수혈 게임</a>
-      <a href="#genetics">④ 유전 퍼즐</a>
-      <a href="#quiz">⑤ OX 퀴즈</a>
-    </nav>
+    <nav class="tabs" id="tabs" aria-label="게임 메뉴"></nav>
+    <button class="mode-chip" id="modeChip" title="모드 바꾸기"></button>
+    <button class="icon-btn" id="muteBtn" aria-label="효과음 끄기/켜기">🔊</button>
   </div>
 </header>
 
 <main class="wrap">
+
+<!-- ================= START (mode select) ================= -->
+<section class="page" id="page-start">
+  <div class="win">
+    <div class="win-bar"><span class="title">창의과학한마당</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body start-hero">
+      <span class="pill">경북과학고등학교</span>
+      <h1>혈액형 판별 실험으로 알아보는<br>나의 ABO 혈액형</h1>
+      <div class="start-chars"><img src="assets/duck_wave.png" alt="오리 캐릭터"><img src="assets/tower_wave.png" alt="첨성대 캐릭터"></div>
+      <p class="jua" style="font-size:20px;margin:6px 0 0">안녕! 어떤 모드로 시작할까?</p>
+      <div class="modes">
+        <button class="mode-card jr" data-mode="junior">
+          <img src="assets/duck_read.png" alt="">
+          <div><span class="lv">LEVEL 1 ~ 3</span><h2>저학년</h2><p>그림으로 쉽게! 원리 → 가상 실험 → OX 퀴즈</p></div>
+        </button>
+        <button class="mode-card sr" data-mode="senior">
+          <img src="assets/tower_write.png" alt="">
+          <div><span class="lv">LEVEL 1 ~ 5</span><h2>고학년</h2><p>원리 → 가상 실험 → 수혈 → 유전 → OX 퀴즈까지 도전!</p></div>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ================= HOME ================= -->
 <section class="page" id="page-home">
@@ -283,32 +368,18 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
           <span class="pill">경북과학고등학교</span>
           <h1>혈액형 판별 실험으로 알아보는<br>나의 ABO 혈액형</h1>
           <p class="muted">실험을 기다리는 동안, 혹은 실험을 마친 뒤에 게임으로 혈액형의 원리를 탐험해 보세요.
-          5개의 미션을 모두 깨면 <b>도장 5개</b>가 모여요!</p>
+          <span id="heroGoal"></span></p>
+          <a class="btn primary" id="startNext" href="#principle">▶ LEVEL 1부터 시작!</a>
         </div>
-        <svg class="mascot" viewBox="0 0 200 220" aria-hidden="true">
-          <ellipse cx="100" cy="206" rx="56" ry="9" fill="#3B2A2F" opacity=".12"/>
-          <path d="M100 12C76 58 40 92 40 136a60 60 0 0 0 120 0c0-44-36-78-60-124z" fill="#D8344A" stroke="#3B2A2F" stroke-width="5"/>
-          <path d="M70 92c-8 14-12 26-12 38" stroke="#fff" stroke-width="8" stroke-linecap="round" fill="none" opacity=".55"/>
-          <circle cx="80" cy="138" r="8" fill="#3B2A2F"/><circle cx="120" cy="138" r="8" fill="#3B2A2F"/>
-          <circle cx="83" cy="135" r="2.5" fill="#fff"/><circle cx="123" cy="135" r="2.5" fill="#fff"/>
-          <ellipse cx="68" cy="156" rx="9" ry="5" fill="#F6CBD0"/><ellipse cx="132" cy="156" rx="9" ry="5" fill="#F6CBD0"/>
-          <path d="M90 158q10 10 20 0" stroke="#3B2A2F" stroke-width="4" fill="none" stroke-linecap="round"/>
-          <g transform="translate(150 40) rotate(12)"><rect x="-22" y="-14" width="44" height="28" rx="8" fill="#FFF8F3" stroke="#3B2A2F" stroke-width="3"/><text x="0" y="6" text-anchor="middle" font-family="Jua" font-size="16" fill="#A23E55">ABO</text></g>
-        </svg>
+        <div class="hero-chars"><img src="assets/duck_wave.png" alt="오리 캐릭터"><img src="assets/tower_thumb.png" alt="첨성대 캐릭터"></div>
       </div>
     </div>
   </div>
 
   <div class="win">
-    <div class="win-bar"><span class="title">미션 고르기</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-bar"><span class="title" id="menuTitle">레벨 고르기</span><span class="dots"><i></i><i></i><i></i></span></div>
     <div class="win-body">
-      <div class="menu" id="menu">
-        <a href="#principle" data-key="principle"><span class="num">MISSION 1</span><h3>혈액형의 원리</h3><p>적혈구의 응집원과 혈장의 응집소를 직접 바꿔 보며 응집 반응을 관찰해요.</p><svg class="got" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#fff" stroke="#A23E55" stroke-width="3"/><path d="M12 20l6 6 11-12" stroke="#A23E55" stroke-width="4" fill="none" stroke-linecap="round"/></svg></a>
-        <a href="#experiment" data-key="experiment"><span class="num">MISSION 2</span><h3>가상 혈액형 실험</h3><p>미지의 혈액에 항A·항B 혈청을 떨어뜨리고 혈액형을 판정해요.</p><svg class="got" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#fff" stroke="#A23E55" stroke-width="3"/><path d="M12 20l6 6 11-12" stroke="#A23E55" stroke-width="4" fill="none" stroke-linecap="round"/></svg></a>
-        <a href="#transfusion" data-key="transfusion"><span class="num">MISSION 3</span><h3>응급실 수혈 게임</h3><p>환자에게 줄 수 있는 혈액팩을 모두 골라 생명을 구해요.</p><svg class="got" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#fff" stroke="#A23E55" stroke-width="3"/><path d="M12 20l6 6 11-12" stroke="#A23E55" stroke-width="4" fill="none" stroke-linecap="round"/></svg></a>
-        <a href="#genetics" data-key="genetics"><span class="num">MISSION 4</span><h3>혈액형 유전 퍼즐</h3><p>부모에게서 물려받는 대립유전자로 가족의 혈액형 수수께끼를 풀어요.</p><svg class="got" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#fff" stroke="#A23E55" stroke-width="3"/><path d="M12 20l6 6 11-12" stroke="#A23E55" stroke-width="4" fill="none" stroke-linecap="round"/></svg></a>
-        <a href="#quiz" data-key="quiz"><span class="num">MISSION 5</span><h3>깜짝 OX 퀴즈</h3><p>배운 내용을 OX 퀴즈로 확인해요. 몇 문제나 맞힐 수 있을까?</p><svg class="got" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#fff" stroke="#A23E55" stroke-width="3"/><path d="M12 20l6 6 11-12" stroke="#A23E55" stroke-width="4" fill="none" stroke-linecap="round"/></svg></a>
-      </div>
+      <div class="menu" id="menu"></div>
     </div>
   </div>
 
@@ -317,16 +388,19 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
     <div class="win-body">
       <div class="stamps" id="stamps"></div>
       <div class="cert" id="cert">
+        <img src="assets/duck_cheer.png" alt="" style="width:130px"><img src="assets/tower_thumb.png" alt="" style="width:130px">
         <h2 style="margin:0">🎉 ABO 혈액형 마스터!</h2>
-        <p style="margin:6px 0">모든 미션을 완료했어요. 이 화면을 부스 스태프에게 보여주세요!</p>
+        <p style="margin:6px 0">모든 레벨을 완료했어요. 이 화면을 부스 스태프에게 보여주세요!</p>
       </div>
-      <p class="small muted" style="text-align:center;margin:12px 0 0">도장은 이 기기에만 저장돼요. <button class="btn" style="min-height:32px;padding:2px 10px;font-size:13px;box-shadow:none" id="resetStamps">도장 초기화</button></p>
+      <p class="small muted" style="text-align:center;margin:12px 0 0">도장은 이 기기에만 저장돼요. <button class="btn" style="min-height:32px;padding:2px 10px;font-size:13px;box-shadow:none" id="resetStamps">도장 초기화</button>
+      <button class="btn" style="min-height:32px;padding:2px 10px;font-size:13px;box-shadow:none" id="changeMode">모드 바꾸기</button></p>
     </div>
   </div>
 </section>
 
 <!-- ================= 1. PRINCIPLE ================= -->
 <section class="page" id="page-principle">
+  <div class="guide" data-guide="principle"></div>
   <div class="win">
     <div class="win-bar"><span class="title">혈액형이란?</span><span class="dots"><i></i><i></i><i></i></span></div>
     <div class="win-body">
@@ -400,6 +474,7 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
 
 <!-- ================= 2. EXPERIMENT ================= -->
 <section class="page" id="page-experiment">
+  <div class="guide" data-guide="experiment"></div>
   <div class="win">
     <div class="win-bar"><span class="title">가상 혈액형 판정 실험</span><span class="dots"><i></i><i></i><i></i></span></div>
     <div class="win-body">
@@ -434,6 +509,7 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
       <div id="judgeBox" hidden>
         <p class="jua" style="margin:16px 0 0;font-size:19px">관찰 결과, 이 혈액은 무슨 형일까요?</p>
         <div class="judge" id="judgeBtns"></div>
+        <p class="jr-only small" style="margin:10px 0 0">💡 힌트: <b>뭉친 칸의 이름</b>이 혈액형! 양쪽 다 뭉치면 <b>AB형</b>, 둘 다 안 뭉치면 <b>O형</b>이에요.</p>
       </div>
       <div id="expFeedback"></div>
       <div class="btn-row" style="margin-top:14px">
@@ -456,6 +532,7 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
 
 <!-- ================= 3. TRANSFUSION ================= -->
 <section class="page" id="page-transfusion">
+  <div class="guide" data-guide="transfusion"></div>
   <div class="win">
     <div class="win-bar"><span class="title">응급실 수혈 게임</span><span class="dots"><i></i><i></i><i></i></span></div>
     <div class="win-body">
@@ -498,6 +575,7 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
 
 <!-- ================= 4. GENETICS ================= -->
 <section class="page" id="page-genetics">
+  <div class="guide" data-guide="genetics"></div>
   <div class="win">
     <div class="win-bar"><span class="title">혈액형 유전 시뮬레이터</span><span class="dots"><i></i><i></i><i></i></span></div>
     <div class="win-body">
@@ -507,6 +585,7 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
         <div><p class="jua" style="margin:0">👨 아빠 유전자형</p><div class="geno-pick" id="dadPick"></div></div>
         <div><p class="jua" style="margin:0">👩 엄마 유전자형</p><div class="geno-pick" id="momPick"></div></div>
       </div>
+      <img src="assets/duck_family.png" alt="오리 가족" style="display:block;width:min(70%,260px);margin:0 auto 12px">
       <div class="punnett" id="punnett"></div>
       <div class="bars" id="bars"></div>
     </div>
@@ -527,6 +606,7 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
 
 <!-- ================= 5. QUIZ ================= -->
 <section class="page" id="page-quiz">
+  <div class="guide" data-guide="quiz"></div>
   <div class="win">
     <div class="win-bar"><span class="title">QUIZ TIME</span><span class="dots"><i></i><i></i><i></i></span></div>
     <div class="win-body" id="quizBody"></div>
@@ -536,6 +616,15 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
 </main>
 <footer>경북과학고등학교 · 창의과학한마당 ABO 혈액형 부스</footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-label="레벨 클리어">
+  <canvas id="confetti"></canvas>
+  <div class="ov-card">
+    <div class="big-stamp"><span class="l1" id="ovL1">LEVEL 1</span><span class="l2">CLEAR</span><span class="l3" id="ovL3">참 잘했어요</span></div>
+    <div class="ov-chars"><img src="assets/duck_cheer.png" alt=""><img src="assets/tower_thumb.png" alt=""></div>
+    <p class="ov-msg" id="ovMsg"></p>
+    <div class="btn-row"><a class="btn primary" id="ovNext" href="#home">다음 LEVEL ▶</a><button class="btn" id="ovClose">닫기</button></div>
+  </div>
+</div>
 
 <script>
 (() => {
@@ -565,40 +654,197 @@ function toast(msg) {
   clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
-/* ---------- stamps (per-device convenience only) ---------- */
-const MISSIONS = [
-  ['principle', '원리'], ['experiment', '실험'], ['transfusion', '수혈'], ['genetics', '유전'], ['quiz', '퀴즈'],
-];
+/* ---------- storage (per-device convenience only) ---------- */
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+};
+
+/* ---------- sound effects (Web Audio, no files) ---------- */
+let muted = store.get('abo-muted', false);
+let actx = null;
+function ac() {
+  if (muted) return null;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    if (actx.state === 'suspended') actx.resume();
+  } catch (e) { return null; }
+  return actx;
+}
+function tone(freq, start, dur, { type = 'sine', vol = .25, slide = 0 } = {}) {
+  const c = ac(); if (!c) return;
+  const t = c.currentTime + start;
+  const o = c.createOscillator(), g = c.createGain();
+  o.type = type; o.frequency.setValueAtTime(freq, t);
+  if (slide) o.frequency.exponentialRampToValueAtTime(slide, t + dur);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(vol, t + .01);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g).connect(c.destination);
+  o.start(t); o.stop(t + dur + .02);
+}
+function noise(start, dur, vol = .5) {
+  const c = ac(); if (!c) return;
+  const t = c.currentTime + start;
+  const buf = c.createBuffer(1, c.sampleRate * dur, c.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 3);
+  const src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+  f.type = 'lowpass'; f.frequency.value = 900; g.gain.value = vol;
+  src.buffer = buf; src.connect(f).connect(g).connect(c.destination); src.start(t);
+}
+const sfx = {
+  tap() { tone(660, 0, .06, { type: 'triangle', vol: .12 }); },
+  drop() { tone(900, 0, .12, { slide: 420, vol: .2 }); },
+  ok() { tone(784, 0, .12, { type: 'triangle' }); tone(1175, .1, .22, { type: 'triangle' }); },
+  no() { tone(220, 0, .18, { type: 'square', vol: .08 }); tone(165, .16, .28, { type: 'square', vol: .08 }); },
+  stamp() {
+    // whoosh → heavy "꽝" → fanfare
+    tone(300, 0, .12, { type: 'sawtooth', vol: .05, slide: 1200 });
+    tone(140, .32, .35, { vol: .9, slide: 38 });
+    noise(.32, .3, .9);
+    [523, 659, 784, 1047].forEach((f, i) => tone(f, .62 + i * .1, .25, { type: 'triangle', vol: .22 }));
+    tone(1047, 1.05, .6, { type: 'triangle', vol: .22 });
+    tone(1319, 1.05, .6, { type: 'sine', vol: .12 });
+  },
+  allClear() {
+    [523, 659, 784, 1047, 784, 1047, 1319].forEach((f, i) => tone(f, 1.9 + i * .12, .3, { type: 'triangle', vol: .2 }));
+  },
+};
+function renderMute() { $('#muteBtn').textContent = muted ? '🔇' : '🔊'; }
+$('#muteBtn').addEventListener('click', () => { muted = !muted; store.set('abo-muted', muted); renderMute(); if (!muted) sfx.tap(); });
+
+/* ---------- modes & levels ---------- */
+const MISSION_INFO = {
+  principle:   { name: '혈액형의 원리', short: '원리', desc: '적혈구의 응집원과 혈장의 응집소를 바꿔 보며 응집 반응을 관찰해요.' },
+  experiment:  { name: '가상 혈액형 실험', short: '가상 실험', desc: '미지의 혈액에 항A·항B 혈청을 떨어뜨리고 혈액형을 판정해요.' },
+  transfusion: { name: '응급실 수혈 게임', short: '수혈 게임', desc: '환자에게 줄 수 있는 혈액팩을 모두 골라 생명을 구해요.' },
+  genetics:    { name: '혈액형 유전 퍼즐', short: '유전 퍼즐', desc: '대립유전자로 가족의 혈액형 수수께끼를 풀어요.' },
+  quiz:        { name: '깜짝 OX 퀴즈', short: 'OX 퀴즈', desc: '배운 내용을 OX 퀴즈로 확인해요.' },
+};
+const MODES = {
+  junior: { name: '저학년', levels: ['principle', 'experiment', 'quiz'] },
+  senior: { name: '고학년', levels: ['principle', 'experiment', 'transfusion', 'genetics', 'quiz'] },
+};
+// what the characters say on each page, per mode
+const GUIDES = {
+  principle:   { img: 'duck_read',  junior: '피 속 빨간 공(적혈구)에는 이름표가 붙어 있어! 이름표 모양이 맞는 Y자 친구를 만나면 꽉 뭉쳐 버려~', senior: '적혈구의 응집원과 혈장의 응집소! 둘이 짝이 맞으면 응집 반응이 일어나. 직접 섞어 볼까?' },
+  experiment:  { img: 'tower_write', junior: '부스에서 하는 실험을 미리 연습해 보자! 순서대로 눌러 봐~', senior: 'PPT의 STEP 1~5 순서 그대로! 응집 결과를 보고 혈액형을 판정해 봐.' },
+  transfusion: { img: 'duck_stand', junior: '환자를 구해 줘!', senior: '응급실이야! 받는 사람의 응집소와 주는 피의 응집원이 만나면 큰일 나. 신중하게!' },
+  genetics:    { img: 'tower_thumb', junior: '', senior: 'A=B>O! 엄마 아빠에게 하나씩 받은 대립유전자로 가족 퍼즐을 풀어 봐.' },
+  quiz:        { img: 'duck_pray', junior: '쉬운 OX 퀴즈야! 4문제 이상 맞히면 도장 꽝!', senior: '기다리는 동안 깜짝 퀴즈! 6문제 이상 맞히면 도장 꽝!' },
+};
+let mode = store.get('abo-mode', null);
+if (!MODES[mode]) mode = null;
 let stamps = {};
-try { stamps = JSON.parse(localStorage.getItem('abo-stamps') || '{}') || {}; } catch (e) { stamps = {}; }
-function saveStamps() { try { localStorage.setItem('abo-stamps', JSON.stringify(stamps)); } catch (e) {} }
+const levels = () => (mode ? MODES[mode].levels : []);
+const levelNo = key => levels().indexOf(key) + 1;
+function loadStamps() { stamps = mode ? store.get('abo-stamps-' + mode, {}) || {} : {}; }
+function saveStamps() { store.set('abo-stamps-' + mode, stamps); }
+function setMode(m) {
+  mode = m; store.set('abo-mode', m); loadStamps();
+  buildModeUI(); startQuiz();
+}
+function buildModeUI() {
+  if (!mode) return;
+  const L = levels();
+  $('#tabs').innerHTML = `<a href="#home">홈</a>` + L.map((k, i) => `<a href="#${k}">LV${i + 1} ${MISSION_INFO[k].short}</a>`).join('');
+  $('#modeChip').textContent = MODES[mode].name + ' 모드';
+  $('#menuTitle').textContent = `${MODES[mode].name} · LEVEL 1~${L.length}`;
+  $('#heroGoal').innerHTML = `<b>LEVEL ${L.length}</b>까지 모두 깨면 <b>도장 ${L.length}개</b>가 모여요!`;
+  $('#menu').innerHTML = L.map((k, i) => `<a href="#${k}" data-key="${k}"><span class="num">LEVEL ${i + 1}</span><h3>${MISSION_INFO[k].name}</h3><p>${MISSION_INFO[k].desc}</p><svg class="got" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#fff" stroke="#A23E55" stroke-width="3"/><path d="M12 20l6 6 11-12" stroke="#A23E55" stroke-width="4" fill="none" stroke-linecap="round"/></svg></a>`).join('');
+  $$('[data-guide]').forEach(el => {
+    const g = GUIDES[el.dataset.guide], text = g[mode];
+    el.hidden = !text;
+    if (text) el.innerHTML = `<img src="assets/${g.img}.png" alt=""><div class="bubble"><span class="pill accent" style="font-size:13px">LEVEL ${levelNo(el.dataset.guide)}</span><br>${text}</div>`;
+  });
+  document.body.dataset.mode = mode;
+  renderStamps();
+}
+function nextLevel() { return levels().find(k => !stamps[k]); }
 function giveStamp(key) {
-  if (stamps[key]) return;
+  if (!mode || !levels().includes(key) || stamps[key]) return;
   stamps[key] = true; saveStamps(); renderStamps();
-  const name = MISSIONS.find(m => m[0] === key)[1];
-  toast(`🎖️ '${name}' 도장 획득! (${Object.keys(stamps).length}/5)`);
+  showStampOverlay(key);
 }
 function renderStamps() {
-  $('#stamps').innerHTML = MISSIONS.map(([k, n], i) =>
-    `<div class="stamp ${stamps[k] ? 'on' : ''}">${stamps[k] ? n + '<br>참 잘했어요' : 'MISSION<br>' + (i + 1)}</div>`).join('');
+  const L = levels();
+  $('#stamps').innerHTML = L.map((k, i) =>
+    `<div class="stamp ${stamps[k] ? 'on' : ''}">${stamps[k] ? 'LV' + (i + 1) + '<br>참 잘했어요' : 'LEVEL<br>' + (i + 1)}</div>`).join('');
   $$('#menu a').forEach(a => a.classList.toggle('done', !!stamps[a.dataset.key]));
-  $('#cert').classList.toggle('show', MISSIONS.every(([k]) => stamps[k]));
+  const all = L.length && L.every(k => stamps[k]);
+  $('#cert').classList.toggle('show', !!all);
+  const nx = nextLevel();
+  $('#startNext').hidden = !nx;
+  if (nx) { $('#startNext').href = '#' + nx; $('#startNext').textContent = `▶ LEVEL ${levelNo(nx)} ${stamps[L[0]] ? '이어서 하기' : '부터 시작!'}`; }
 }
 $('#resetStamps').addEventListener('click', () => {
   if (!confirm('모은 도장을 모두 지울까요?')) return;
   stamps = {}; saveStamps(); renderStamps();
 });
+function goStart() { location.hash = '#start'; }
+$('#changeMode').addEventListener('click', goStart);
+$('#modeChip').addEventListener('click', goStart);
+$$('.mode-card').forEach(b => b.addEventListener('click', () => {
+  sfx.ok(); setMode(b.dataset.mode); location.hash = '#home';
+}));
+
+/* ---------- big stamp overlay ---------- */
+let confettiRaf = 0;
+function confetti() {
+  const cv = $('#confetti'), g = cv.getContext('2d');
+  const W = cv.width = innerWidth, H = cv.height = innerHeight;
+  const cols = ['#D7263D', '#3B7DD8', '#E0A100', '#F6CBD0', '#2E8B57', '#fff'];
+  const ps = Array.from({ length: 160 }, () => ({
+    x: W / 2, y: H * .42, vx: (Math.random() - .5) * 18, vy: -Math.random() * 16 - 4,
+    s: 5 + Math.random() * 7, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: rand(cols),
+  }));
+  const t0 = performance.now();
+  cancelAnimationFrame(confettiRaf);
+  (function f(t) {
+    g.clearRect(0, 0, W, H);
+    if (t - t0 < 400) { confettiRaf = requestAnimationFrame(f); return; } // wait for the slam
+    for (const p of ps) {
+      p.vy += .45; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      g.save(); g.translate(p.x, p.y); g.rotate(p.r); g.fillStyle = p.c; g.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); g.restore();
+    }
+    if (t - t0 < 4000) confettiRaf = requestAnimationFrame(f); else g.clearRect(0, 0, W, H);
+  })(t0);
+}
+function showStampOverlay(key) {
+  const ov = $('#ov');
+  const n = levelNo(key), L = levels();
+  const all = L.every(k => stamps[k]);
+  $('#ovL1').textContent = `LEVEL ${n}`;
+  $('#ovL3').textContent = all ? '모든 레벨 완료!' : '참 잘했어요';
+  const nx = nextLevel();
+  $('#ovMsg').textContent = all
+    ? `🎉 ${MODES[mode].name} 모드 올클리어! 부스 스태프에게 보여주세요!`
+    : `'${MISSION_INFO[key].name}' 클리어! 도장 ${Object.keys(stamps).length}/${L.length}`;
+  $('#ovNext').href = nx ? '#' + nx : '#home';
+  $('#ovNext').textContent = nx ? `LEVEL ${levelNo(nx)} 도전 ▶` : '🏆 도장판 보기';
+  ov.classList.remove('show'); void ov.offsetWidth; ov.classList.add('show');
+  const main = $('main'); main.classList.remove('shake'); void main.offsetWidth; main.classList.add('shake');
+  setTimeout(() => { if (navigator.vibrate) try { navigator.vibrate([0, 0, 60]); } catch (e) {} }, 420);
+  sfx.stamp(); if (all) sfx.allClear();
+  confetti();
+}
+function closeOverlay() { $('#ov').classList.remove('show'); cancelAnimationFrame(confettiRaf); }
+$('#ovClose').addEventListener('click', closeOverlay);
+$('#ovNext').addEventListener('click', closeOverlay);
 
 /* ---------- routing ---------- */
-const PAGES = ['home', 'principle', 'experiment', 'transfusion', 'genetics', 'quiz'];
+const PAGES = ['start', 'home', 'principle', 'experiment', 'transfusion', 'genetics', 'quiz'];
 function route() {
-  const id = (location.hash || '#home').slice(1);
-  const page = PAGES.includes(id) ? id : 'home';
+  let page = (location.hash || '').slice(1);
+  if (!mode) page = 'start';
+  else if (!PAGES.includes(page) || (page !== 'start' && page !== 'home' && !levels().includes(page))) page = 'home';
   $$('section.page').forEach(s => s.classList.toggle('active', s.id === 'page-' + page));
   $$('nav.tabs a').forEach(a => {
     if (a.getAttribute('href') === '#' + page) a.setAttribute('aria-current', 'page');
     else a.removeAttribute('aria-current');
   });
+  document.querySelector('header.top').hidden = page === 'start';
   window.scrollTo(0, 0);
   expRunning = page === 'experiment';
   if (expRunning) loop();
@@ -708,13 +954,14 @@ function drawBind(mixed) {
     }));
     const box = $('#bindMsg');
     box.hidden = false;
+    agg ? sfx.no() : sfx.ok();
     box.className = 'feedback ' + (agg ? 'no' : 'ok');
     box.innerHTML = agg
       ? `<h3>응집 발생! 🔴</h3>${bindCell}형 적혈구 표면의 <b>응집원 ${bindSerum}</b>에 항${bindSerum} 항체가 딱 맞게 결합해서, 하나의 항체가 적혈구 두 개를 붙잡아요. 그래서 적혈구들이 덩어리로 뭉쳤어요.`
       : `<h3>응집 없음 🟢</h3>${bindCell}형 적혈구에는 <b>응집원 ${bindSerum}</b>이(가) 없어서 항${bindSerum} 항체가 결합할 곳이 없어요. 적혈구가 고르게 흩어져 있어요.`;
     bindTried.add(agg ? 'y' : 'n');
     if (bindTried.size === 2) giveStamp('principle');
-    else if (!stamps.principle) setTimeout(() => toast(agg ? '이번엔 응집이 안 되는 조합도 찾아봐요!' : '이번엔 응집이 되는 조합도 찾아봐요!'), 1600);
+    else setTimeout(() => { if (!stamps.principle && bindTried.size < 2) toast(agg ? '이번엔 응집이 안 되는 조합도 찾아봐요!' : '이번엔 응집이 되는 조합도 찾아봐요!'); }, 1600);
   }
 }
 $('#bindMix').addEventListener('click', () => drawBind(true));
@@ -787,12 +1034,12 @@ function renderExp() {
 }
 $('#finger').addEventListener('click', () => {
   if (exp.step === 0) {
-    $('#swabMark').setAttribute('opacity', 1);
+    $('#swabMark').setAttribute('opacity', 1); sfx.tap();
     toast('🧴 쓱싹쓱싹, 소독 완료!');
     setTimeout(() => setStep(1), 500);
   } else if (exp.step === 1) {
     $('#swabMark').setAttribute('opacity', 0);
-    $('#bloodDrop').setAttribute('opacity', 1);
+    $('#bloodDrop').setAttribute('opacity', 1); sfx.drop();
     toast('🩸 톡! 피 한 방울이 나왔어요');
     setTimeout(() => setStep(2), 700);
   }
@@ -805,16 +1052,16 @@ $('#droppers').addEventListener('click', e => {
 function tapWell(side) {
   if (exp.step === 2) {
     if (exp.blood[side]) return;
-    exp.blood[side] = true;
+    exp.blood[side] = true; sfx.drop();
     if (exp.blood.A && exp.blood.B) setTimeout(() => setStep(3), 400);
   } else if (exp.step === 3) {
-    if (!exp.dropper) { toast('먼저 스포이트를 골라 주세요!'); return; }
+    if (!exp.dropper) { sfx.no(); toast('먼저 스포이트를 골라 주세요!'); return; }
     if (exp.dropper !== side) {
-      toast(side === 'A' ? '왼쪽 칸에는 항A 혈청을 떨어뜨려요!' : '오른쪽 칸에는 항B 혈청을 떨어뜨려요!');
+      sfx.no(); toast(side === 'A' ? '왼쪽 칸에는 항A 혈청을 떨어뜨려요!' : '오른쪽 칸에는 항B 혈청을 떨어뜨려요!');
       return;
     }
     if (exp.drops[side] >= 4) { toast('4방울이면 충분해요!'); return; }
-    exp.drops[side]++;
+    exp.drops[side]++; sfx.drop();
     renderExp();
     if (exp.drops.A === 4 && exp.drops.B === 4) setTimeout(() => setStep(4), 400);
   }
@@ -923,6 +1170,7 @@ $('#judgeBtns').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b || exp.answered) return;
   exp.answered = true;
   const ok = b.dataset.k === exp.type;
+  ok ? sfx.ok() : sfx.no();
   if (ok) { expWins++; giveStamp('experiment'); renderExp(); }
   $('#expFeedback').innerHTML = `<div class="feedback ${ok ? 'ok' : 'no'}"><h3>${ok ? '정답! 🎉' : `아쉬워요! 정답은 ${exp.type}형`}</h3>${explainType(exp.type)}</div>`;
 });
@@ -980,7 +1228,7 @@ $('#bags').addEventListener('click', e => {
   const b = e.target.closest('.bag'); if (!b || tf.done) return;
   const k = b.dataset.k;
   tf.picked.has(k) ? tf.picked.delete(k) : tf.picked.add(k);
-  b.setAttribute('aria-pressed', tf.picked.has(k));
+  b.setAttribute('aria-pressed', tf.picked.has(k)); sfx.tap();
 });
 $('#tfSubmit').addEventListener('click', () => {
   if (tf.round === -1) { $('#tfSubmit').textContent = '💉 수혈하기'; startTransfusion(); return; }
@@ -1002,6 +1250,7 @@ $('#tfSubmit').addEventListener('click', () => {
     }
   });
   if (allRight) tf.score++;
+  allRight ? sfx.ok() : sfx.no();
   $('#tfScore').textContent = `환자 ${tf.round + 1} / ${ROUNDS} · 점수 ${tf.score}`;
   $('#tfFeedback').innerHTML = `<div class="feedback ${allRight ? 'ok' : 'no'}"><h3>${allRight ? '완벽한 수혈! 환자가 회복했어요 💖' : '앗, 다시 확인해 봐요'}</h3>
     ${lines.join('<br>') || `${p}형 환자에게 줄 수 있는 피: <b>${TYPE_KEYS.filter(k => canGive(k, p)).join(', ')}형</b>`}</div>`;
@@ -1102,6 +1351,7 @@ $('#pzPick').addEventListener('click', e => {
   } else {
     msg = `<h3>아쉬워요!</h3>${g}라면 <b>${g[0]}</b> 또는 <b>${g[1]}</b>만 물려줄 수 있어요. 각 자녀가 받은 대립유전자를 다시 따져 보세요!`;
   }
+  ok ? sfx.ok() : sfx.no();
   $('#pzFeedback').innerHTML = `<div class="feedback ${ok ? 'ok' : 'no'}">${msg}</div>`;
   $('#pzSolved').textContent = `해결 ${pzSolved.size}개 · 3개 해결하면 도장!`;
 });
@@ -1122,11 +1372,20 @@ const QUIZ = [
   ['AB형과 O형 부모 사이에서 AB형 아이가 태어날 수 있다?', false, 'O형 부모는 O만 물려주므로 자녀는 AO(A형) 또는 BO(B형)만 가능해요.'],
   ['항원-항체 반응은 우리 몸의 면역 과정에서도 중요한 역할을 한다?', true, '몸에 침입한 병원체의 항원에 항체가 결합해 무력화시키는 것도 같은 원리예요!'],
 ];
-const qz = { i: 0, score: 0, order: [] };
+const QUIZ_JR = [
+  ['피를 뽑기 전에는 알콜솜으로 소독을 해야 한다?', true, '세균이 들어가지 않도록 알콜솜으로 꼭 소독해요. 혈액스틱도 함께!'],
+  ['피가 오돌토돌 뭉치는 것을 "응집"이라고 한다?', true, '맞아요! 적혈구의 이름표(응집원)와 Y자 친구(응집소)가 만나 뭉치는 거예요.'],
+  ['항A 혈청에서만 피가 뭉치면 A형이다?', true, '항A 혈청은 A 이름표를 가진 적혈구만 뭉치게 해요. 그래서 A형!'],
+  ['O형 피는 항A, 항B 혈청 모두에서 뭉친다?', false, 'O형 적혈구에는 이름표(응집원)가 없어서 어느 쪽에서도 뭉치지 않아요.'],
+  ['AB형 피는 항B 혈청에서 뭉치지 않는다?', false, 'AB형은 A와 B 이름표를 모두 가져서 양쪽 다 뭉쳐요!'],
+  ['항 A 혈청에는 A 항원이 들어있다?', false, 'A 항원이 아니라 <b>A 항체</b>(Y자 친구)가 들어있어요!'],
+];
+const quizSet = () => (mode === 'junior'
+  ? { list: QUIZ_JR, pass: 4, order: [...QUIZ_JR.keys()].sort(() => Math.random() - .5) }
+  : { list: QUIZ, pass: 6, order: [0, 1, ...[2, 3, 4, 5, 6, 7, 8].sort(() => Math.random() - .5)] }); // PPT questions first
+const qz = { i: 0, score: 0, order: [], list: QUIZ, pass: 6 };
 function startQuiz() {
-  qz.i = 0; qz.score = 0;
-  // keep the two PPT questions first, shuffle the rest
-  qz.order = [0, 1, ...[2, 3, 4, 5, 6, 7, 8].sort(() => Math.random() - .5)];
+  Object.assign(qz, { i: 0, score: 0 }, quizSet());
   renderQuiz();
 }
 function renderQuiz() {
@@ -1134,14 +1393,14 @@ function renderQuiz() {
   if (qz.i >= qz.order.length) {
     const n = qz.order.length;
     body.innerHTML = `<div style="text-align:center"><p class="quiz-q">${qz.score} / ${n} 정답!</p>
-      <p>${qz.score === n ? '🏆 만점! 혈액형 박사님이시군요!' : qz.score >= 6 ? '👍 훌륭해요!' : '💪 원리 미션을 다시 보고 도전해 봐요!'}</p>
+      <p>${qz.score === n ? '🏆 만점! 혈액형 박사님이시군요!' : qz.score >= qz.pass ? '👍 훌륭해요!' : '💪 원리 미션을 다시 보고 도전해 봐요!'}</p>
       <button class="btn primary" id="qzAgain">다시 풀기</button></div>`;
     $('#qzAgain').onclick = startQuiz;
-    if (qz.score >= 6) giveStamp('quiz');
-    else toast('6문제 이상 맞히면 도장을 받아요!');
+    if (qz.score >= qz.pass) giveStamp('quiz');
+    else toast(`${qz.pass}문제 이상 맞히면 도장을 받아요!`);
     return;
   }
-  const [q] = QUIZ[qz.order[qz.i]];
+  const [q] = qz.list[qz.order[qz.i]];
   body.innerHTML = `<div class="prog"><i style="width:${qz.i / qz.order.length * 100}%"></i></div>
     <div class="small muted">Q${qz.i + 1} / ${qz.order.length} · 점수 ${qz.score}</div>
     <p class="quiz-q">${q}</p>
@@ -1150,9 +1409,10 @@ function renderQuiz() {
   $('.ox', body).onclick = e => {
     const b = e.target.closest('button'); if (!b || body.dataset.lock === '1') return;
     body.dataset.lock = '1';
-    const [, ans, why] = QUIZ[qz.order[qz.i]];
+    const [, ans, why] = qz.list[qz.order[qz.i]];
     const ok = (b.dataset.v === '1') === ans;
     if (ok) qz.score++;
+    ok ? sfx.ok() : sfx.no();
     $$('.ox .btn', body).forEach(x => { if (x !== b) x.disabled = true; });
     $('#qzFb').innerHTML = `<div class="feedback ${ok ? 'ok' : 'no'}"><h3>${ok ? '정답!' : '땡!'} 정답은 ${ans ? 'O' : 'X'}</h3>${why}</div>
       <div style="text-align:center;margin-top:12px"><button class="btn primary" id="qzNext">${qz.i + 1 < qz.order.length ? '다음 문제 ▶' : '결과 보기 ▶'}</button></div>`;
@@ -1161,7 +1421,9 @@ function renderQuiz() {
 }
 
 /* ---------- init ---------- */
-renderStamps();
+loadStamps();
+renderMute();
+buildModeUI();
 renderPrinciple();
 drawBind(false);
 newSample();
