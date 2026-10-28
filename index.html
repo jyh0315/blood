@@ -1,0 +1,1176 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light only">
+<title>나의 ABO 혈액형 탐험</title>
+<meta name="description" content="혈액형 판별 실험과 함께하는 ABO 혈액형 원리 인터랙티브 게임 - 경북과학고등학교 창의과학한마당">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#F6CBD0;
+  --bg-2:#FADDE1;
+  --panel:#FFF8F3;
+  --panel-2:#FFFDFB;
+  --ink:#3B2A2F;
+  --ink-2:#7A4E58;
+  --accent:#A23E55;
+  --accent-soft:#EBB2BA;
+  --line:#3B2A2F;
+  --blood:#B3263A;
+  --agA:#3B7DD8;   /* A 응집원 / 항A 혈청 */
+  --agA-soft:#DCE9FB;
+  --agB:#E0A100;   /* B 응집원 / 항B 혈청 */
+  --agB-soft:#FFF1C2;
+  --ok:#2E8B57;
+  --ok-soft:#DDF3E5;
+  --no:#C0392B;
+  --no-soft:#FBE0DC;
+  --shadow: 4px 4px 0 var(--line);
+  --radius:18px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Gowun Dodum",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  font-size:16px;line-height:1.6;
+  background-image:radial-gradient(var(--bg-2) 1.5px,transparent 1.5px);
+  background-size:22px 22px;
+  min-height:100vh;
+}
+h1,h2,h3,.jua{font-family:"Jua","Gowun Dodum",sans-serif;font-weight:400;letter-spacing:.01em}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:960px;margin:0 auto;padding:16px 16px 64px}
+
+/* ---------- header / nav ---------- */
+header.top{
+  position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);
+  backdrop-filter:blur(6px);border-bottom:2px solid var(--line);
+}
+.top-inner{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);font-family:"Jua";font-size:20px;white-space:nowrap}
+.brand svg{width:28px;height:28px}
+nav.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-left:auto;padding:2px}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs a{
+  flex:none;text-decoration:none;color:var(--ink);font-family:"Jua";font-size:15px;
+  padding:6px 12px;border:2px solid var(--line);border-radius:999px;background:var(--panel);
+}
+nav.tabs a[aria-current="page"]{background:var(--accent);color:#fff}
+@media (max-width:720px){
+  .top-inner{flex-wrap:wrap}
+  nav.tabs{margin-left:0;width:100%}
+}
+
+/* ---------- retro window card (PPT style) ---------- */
+.win{
+  background:var(--panel);border:2px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);margin:20px 0;overflow:hidden;
+}
+.win-bar{
+  display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--accent-soft);
+  border-bottom:2px solid var(--line);
+}
+.win-bar .title{
+  font-family:"Jua";font-size:18px;background:var(--panel-2);border:2px solid var(--line);
+  border-radius:999px;padding:1px 14px;
+}
+.win-bar .dots{margin-left:auto;display:flex;gap:5px}
+.win-bar .dots i{width:9px;height:9px;border-radius:50%;background:var(--ink);display:block}
+.win-body{padding:18px}
+@media (max-width:520px){.win-body{padding:14px}}
+
+.pill{display:inline-block;font-family:"Jua";border:2px solid var(--line);border-radius:999px;padding:0 12px;background:var(--panel-2)}
+.pill.accent{background:var(--accent);color:#fff}
+.muted{color:var(--ink-2)}
+.small{font-size:14px}
+mark{background:var(--accent-soft);color:inherit;padding:0 3px;border-radius:4px}
+b.a{color:var(--agA)} b.b{color:#B07E00}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  font-family:"Jua";font-size:17px;padding:10px 18px;min-height:46px;
+  border:2px solid var(--line);border-radius:14px;background:var(--panel-2);
+  box-shadow:3px 3px 0 var(--line);transition:transform .08s,box-shadow .08s;
+}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line)}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.sel{background:var(--ink);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:3px 3px 0 var(--line)}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:720px){.grid2{grid-template-columns:1fr}}
+
+.toast{
+  position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);
+  background:var(--ink);color:#fff;padding:10px 18px;border-radius:14px;font-family:"Jua";
+  transition:transform .3s;z-index:50;max-width:calc(100% - 32px);text-align:center;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+.feedback{border:2px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:14px}
+.feedback.ok{background:var(--ok-soft)}
+.feedback.no{background:var(--no-soft)}
+.feedback h3{margin:0 0 4px;font-size:20px}
+
+section.page{display:none}
+section.page.active{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ---------- home ---------- */
+.hero{display:flex;gap:18px;align-items:center}
+.hero h1{font-size:clamp(28px,6vw,44px);line-height:1.2;margin:0 0 6px}
+.hero .mascot{width:min(36vw,170px);flex:none}
+@media (max-width:520px){.hero{flex-direction:column-reverse;text-align:center}}
+.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.menu a{
+  display:block;text-decoration:none;color:var(--ink);background:var(--panel-2);
+  border:2px solid var(--line);border-radius:16px;padding:14px;box-shadow:3px 3px 0 var(--line);
+  position:relative;
+}
+.menu a:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line)}
+.menu .num{font-family:"Jua";color:var(--accent)}
+.menu h3{margin:2px 0 4px;font-size:21px}
+.menu p{margin:0;font-size:14px;color:var(--ink-2)}
+.menu .got{position:absolute;top:10px;right:10px;width:34px;height:34px;opacity:0;transform:scale(.5) rotate(-20deg);transition:.3s}
+.menu a.done .got{opacity:1;transform:scale(1) rotate(-12deg)}
+
+.stamps{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.stamp{
+  width:72px;height:72px;border-radius:50%;border:2px dashed var(--ink-2);display:grid;place-items:center;
+  font-family:"Jua";font-size:13px;color:var(--ink-2);text-align:center;line-height:1.15;background:var(--panel-2);
+}
+.stamp.on{border:3px solid var(--accent);color:var(--accent);background:#fff;transform:rotate(-8deg);animation:stampIn .35s}
+@keyframes stampIn{0%{transform:scale(1.6) rotate(-8deg);opacity:0}100%{transform:scale(1) rotate(-8deg);opacity:1}}
+.cert{display:none;text-align:center;margin-top:14px;padding:14px;border:3px double var(--accent);border-radius:14px;background:#fff}
+.cert.show{display:block}
+
+/* ---------- principle ---------- */
+.type-pick{display:flex;gap:8px;flex-wrap:wrap}
+.type-pick .btn{min-width:62px}
+.cell-stage{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch}
+@media (max-width:520px){.cell-stage{grid-template-columns:1fr}}
+.stage-box{border:2px solid var(--line);border-radius:14px;background:#fff;padding:10px;text-align:center}
+.stage-box svg{width:100%;height:auto;max-height:200px}
+.stage-box .cap{font-family:"Jua";font-size:16px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend svg{width:26px;height:26px}
+table.tbl{width:100%;border-collapse:collapse;background:#fff;border:2px solid var(--line);font-size:15px}
+.tbl th,.tbl td{border:1.5px solid var(--line);padding:8px 4px;text-align:center;word-break:keep-all}
+.tbl th{background:var(--bg-2);font-family:"Jua";font-weight:400}
+.tbl-scroll{overflow-x:auto}
+#bindSvg{width:100%;height:auto;background:#fff;border:2px solid var(--line);border-radius:14px;display:block}
+#bindSvg .mv{transition:transform 1.1s cubic-bezier(.5,0,.2,1)}
+#bindSvg .ab{transition:opacity .5s .8s}
+
+/* ---------- experiment ---------- */
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.steps span{font-family:"Jua";font-size:14px;padding:2px 10px;border-radius:999px;border:2px solid var(--line);background:var(--panel-2);opacity:.5}
+.steps span.on{background:var(--accent);color:#fff;opacity:1}
+.steps span.done{opacity:1}
+.step-title{font-size:22px;margin:0}
+.lab{
+  display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;margin-top:12px;
+}
+@media (max-width:620px){.lab{grid-template-columns:1fr}}
+.finger-box{display:flex;justify-content:center}
+.finger-box svg{width:140px;height:auto;cursor:pointer;touch-action:manipulation}
+.slide{
+  background:linear-gradient(135deg,#f4fbff,#e5eef3);border:2px solid var(--line);border-radius:14px;
+  padding:14px 10px 10px;display:flex;justify-content:space-around;gap:8px;position:relative;
+}
+.well{text-align:center;flex:1;max-width:220px}
+.well canvas{width:100%;max-width:200px;aspect-ratio:1;display:block;margin:0 auto;touch-action:none;cursor:pointer;border-radius:50%}
+.well .lbl{display:inline-block;margin-top:6px;font-family:"Jua";font-size:15px;padding:0 10px;border:2px solid var(--line);border-radius:999px}
+.well.a .lbl{background:var(--agA-soft)}
+.well.b .lbl{background:var(--agB-soft)}
+.well .cnt{font-size:13px;color:var(--ink-2);min-height:20px}
+.droppers{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.dropper.a.sel{background:var(--agA);color:#fff}
+.dropper.b.sel{background:var(--agB);color:var(--ink)}
+.judge{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.judge .btn{font-size:20px;padding:10px 4px;white-space:nowrap}
+.yn{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:6px 0}
+.yn .q{min-width:150px;font-family:"Jua"}
+
+/* ---------- transfusion ---------- */
+.patient{display:flex;align-items:center;gap:14px;border:2px solid var(--line);border-radius:14px;background:#fff;padding:12px}
+.patient .big{font-family:"Jua";font-size:40px;color:var(--accent);line-height:1}
+.bags{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+@media (max-width:460px){.bags{grid-template-columns:repeat(2,1fr)}}
+.bag{
+  border:2px solid var(--line);border-radius:16px;background:var(--panel-2);padding:8px 6px 10px;text-align:center;
+  box-shadow:3px 3px 0 var(--line);position:relative;
+}
+.bag svg{width:64px;height:80px}
+.bag .t{font-family:"Jua";font-size:22px;display:block}
+.bag[aria-pressed="true"]{background:var(--accent-soft);outline:3px solid var(--accent);outline-offset:-6px}
+.bag.res-ok{background:var(--ok-soft)}
+.bag.res-no{background:var(--no-soft)}
+.bag .mark{position:absolute;top:4px;right:8px;font-family:"Jua";font-size:22px}
+.score{font-family:"Jua";font-size:18px}
+.flow svg{width:100%;max-width:360px;height:auto;display:block;margin:0 auto}
+
+/* ---------- genetics ---------- */
+.geno-pick{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.geno-pick .btn{min-height:40px;padding:6px 12px;font-size:16px}
+.punnett{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-width:360px;margin:0 auto}
+.punnett div{border:2px solid var(--line);border-radius:10px;text-align:center;padding:10px 4px;background:#fff;font-family:"Jua";font-size:18px}
+.punnett .h{background:var(--bg-2)}
+.punnett .corner{background:transparent;border:none}
+.punnett small{display:block;font-family:"Gowun Dodum";font-size:13px;color:var(--ink-2)}
+.bars{margin-top:14px}
+.bar{display:grid;grid-template-columns:44px 1fr 48px;align-items:center;gap:8px;margin:6px 0;font-family:"Jua"}
+.bar .track{height:18px;border:2px solid var(--line);border-radius:999px;background:#fff;overflow:hidden}
+.bar .fill{height:100%;background:var(--accent);transition:width .5s}
+.family{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 18px;max-width:420px;margin:10px auto;position:relative}
+.person{border:2px solid var(--line);border-radius:14px;background:#fff;text-align:center;padding:8px}
+.person .role{display:inline-block;font-family:"Jua";font-size:13px;border-radius:999px;padding:0 10px;color:#fff}
+.person .role.m{background:#5B9BE0}
+.person .role.f{background:#E57C9B}
+.person .bt{font-family:"Jua";font-size:28px;display:block}
+.person.q .bt{color:var(--accent)}
+.family .line{grid-column:1/-1;text-align:center;font-size:13px;color:var(--ink-2);margin:-4px 0}
+
+/* ---------- quiz ---------- */
+.quiz-q{font-family:"Jua";font-size:clamp(22px,4.6vw,30px);text-align:center;margin:18px 0}
+.ox{display:flex;gap:16px;justify-content:center}
+.ox .btn{width:120px;height:120px;font-size:64px;border-radius:24px}
+.ox .o{color:#2a6fd0}
+.ox .x{color:var(--no)}
+.prog{height:10px;border:2px solid var(--line);border-radius:999px;overflow:hidden;background:#fff;margin-bottom:6px}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .3s}
+
+footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <a class="brand" href="#home" aria-label="처음으로">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3C14 12 8 18 8 25a12 12 0 0 0 24 0c0-7-6-13-12-22z" fill="#B3263A" stroke="#3B2A2F" stroke-width="2.5"/><circle cx="16" cy="25" r="1.8" fill="#3B2A2F"/><circle cx="24" cy="25" r="1.8" fill="#3B2A2F"/><path d="M17 29q3 2.5 6 0" stroke="#3B2A2F" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+      ABO 탐험
+    </a>
+    <nav class="tabs" aria-label="게임 메뉴">
+      <a href="#home">홈</a>
+      <a href="#principle">① 원리</a>
+      <a href="#experiment">② 가상 실험</a>
+      <a href="#transfusion">③ 수혈 게임</a>
+      <a href="#genetics">④ 유전 퍼즐</a>
+      <a href="#quiz">⑤ OX 퀴즈</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ================= HOME ================= -->
+<section class="page" id="page-home">
+  <div class="win">
+    <div class="win-bar"><span class="title">창의과학한마당</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body">
+      <div class="hero">
+        <div>
+          <span class="pill">경북과학고등학교</span>
+          <h1>혈액형 판별 실험으로 알아보는<br>나의 ABO 혈액형</h1>
+          <p class="muted">실험을 기다리는 동안, 혹은 실험을 마친 뒤에 게임으로 혈액형의 원리를 탐험해 보세요.
+          5개의 미션을 모두 깨면 <b>도장 5개</b>가 모여요!</p>
+        </div>
+        <svg class="mascot" viewBox="0 0 200 220" aria-hidden="true">
+          <ellipse cx="100" cy="206" rx="56" ry="9" fill="#3B2A2F" opacity=".12"/>
+          <path d="M100 12C76 58 40 92 40 136a60 60 0 0 0 120 0c0-44-36-78-60-124z" fill="#D8344A" stroke="#3B2A2F" stroke-width="5"/>
+          <path d="M70 92c-8 14-12 26-12 38" stroke="#fff" stroke-width="8" stroke-linecap="round" fill="none" opacity=".55"/>
+          <circle cx="80" cy="138" r="8" fill="#3B2A2F"/><circle cx="120" cy="138" r="8" fill="#3B2A2F"/>
+          <circle cx="83" cy="135" r="2.5" fill="#fff"/><circle cx="123" cy="135" r="2.5" fill="#fff"/>
+          <ellipse cx="68" cy="156" rx="9" ry="5" fill="#F6CBD0"/><ellipse cx="132" cy="156" rx="9" ry="5" fill="#F6CBD0"/>
+          <path d="M90 158q10 10 20 0" stroke="#3B2A2F" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <g transform="translate(150 40) rotate(12)"><rect x="-22" y="-14" width="44" height="28" rx="8" fill="#FFF8F3" stroke="#3B2A2F" stroke-width="3"/><text x="0" y="6" text-anchor="middle" font-family="Jua" font-size="16" fill="#A23E55">ABO</text></g>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="win">
+    <div class="win-bar"><span class="title">미션 고르기</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body">
+      <div class="menu" id="menu">
+        <a href="#principle" data-key="principle"><span class="num">MISSION 1</span><h3>혈액형의 원리</h3><p>적혈구의 응집원과 혈장의 응집소를 직접 바꿔 보며 응집 반응을 관찰해요.</p><svg class="got" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#fff" stroke="#A23E55" stroke-width="3"/><path d="M12 20l6 6 11-12" stroke="#A23E55" stroke-width="4" fill="none" stroke-linecap="round"/></svg></a>
+        <a href="#experiment" data-key="experiment"><span class="num">MISSION 2</span><h3>가상 혈액형 실험</h3><p>미지의 혈액에 항A·항B 혈청을 떨어뜨리고 혈액형을 판정해요.</p><svg class="got" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#fff" stroke="#A23E55" stroke-width="3"/><path d="M12 20l6 6 11-12" stroke="#A23E55" stroke-width="4" fill="none" stroke-linecap="round"/></svg></a>
+        <a href="#transfusion" data-key="transfusion"><span class="num">MISSION 3</span><h3>응급실 수혈 게임</h3><p>환자에게 줄 수 있는 혈액팩을 모두 골라 생명을 구해요.</p><svg class="got" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#fff" stroke="#A23E55" stroke-width="3"/><path d="M12 20l6 6 11-12" stroke="#A23E55" stroke-width="4" fill="none" stroke-linecap="round"/></svg></a>
+        <a href="#genetics" data-key="genetics"><span class="num">MISSION 4</span><h3>혈액형 유전 퍼즐</h3><p>부모에게서 물려받는 대립유전자로 가족의 혈액형 수수께끼를 풀어요.</p><svg class="got" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#fff" stroke="#A23E55" stroke-width="3"/><path d="M12 20l6 6 11-12" stroke="#A23E55" stroke-width="4" fill="none" stroke-linecap="round"/></svg></a>
+        <a href="#quiz" data-key="quiz"><span class="num">MISSION 5</span><h3>깜짝 OX 퀴즈</h3><p>배운 내용을 OX 퀴즈로 확인해요. 몇 문제나 맞힐 수 있을까?</p><svg class="got" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#fff" stroke="#A23E55" stroke-width="3"/><path d="M12 20l6 6 11-12" stroke="#A23E55" stroke-width="4" fill="none" stroke-linecap="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="win">
+    <div class="win-bar"><span class="title">도장판</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body">
+      <div class="stamps" id="stamps"></div>
+      <div class="cert" id="cert">
+        <h2 style="margin:0">🎉 ABO 혈액형 마스터!</h2>
+        <p style="margin:6px 0">모든 미션을 완료했어요. 이 화면을 부스 스태프에게 보여주세요!</p>
+      </div>
+      <p class="small muted" style="text-align:center;margin:12px 0 0">도장은 이 기기에만 저장돼요. <button class="btn" style="min-height:32px;padding:2px 10px;font-size:13px;box-shadow:none" id="resetStamps">도장 초기화</button></p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 1. PRINCIPLE ================= -->
+<section class="page" id="page-principle">
+  <div class="win">
+    <div class="win-bar"><span class="title">혈액형이란?</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body">
+      <p style="margin-top:0">혈액형은 <mark>적혈구 세포막에 존재하는 항원(응집원)</mark>의 유무와 종류에 따라 혈액을 분류하는 체계예요.
+      그리고 혈장 속에는 내 적혈구에 <b>없는</b> 응집원과 결합하는 <mark>항체(응집소)</mark>가 들어 있어요.</p>
+      <p class="jua" style="margin-bottom:6px">혈액형을 눌러 바꿔 보세요 👇</p>
+      <div class="type-pick" id="typePick"></div>
+      <div class="cell-stage" style="margin-top:14px">
+        <div class="stage-box">
+          <div class="cap">적혈구 표면 · 응집원(항원)</div>
+          <svg id="rbcView" viewBox="0 0 200 200" role="img" aria-label="적혈구"></svg>
+          <div id="rbcText" class="small"></div>
+        </div>
+        <div class="stage-box">
+          <div class="cap">혈장 속 · 응집소(항체)</div>
+          <svg id="plasmaView" viewBox="0 0 200 200" role="img" aria-label="혈장"></svg>
+          <div id="plasmaText" class="small"></div>
+        </div>
+      </div>
+      <div class="legend">
+        <span><svg viewBox="0 0 26 26"><path d="M13 4l9 16H4z" fill="var(--agA)" stroke="#3B2A2F" stroke-width="1.5"/></svg>응집원 A</span>
+        <span><svg viewBox="0 0 26 26"><rect x="5" y="5" width="16" height="16" rx="4" fill="var(--agB)" stroke="#3B2A2F" stroke-width="1.5"/></svg>응집원 B</span>
+        <span><svg viewBox="0 0 26 26"><g stroke="var(--agA)" stroke-width="3" fill="none" stroke-linecap="round"><path d="M13 24V14M13 14L6 6M13 14l7-8"/></g></svg>응집소 α (항A 항체)</span>
+        <span><svg viewBox="0 0 26 26"><g stroke="#B07E00" stroke-width="3" fill="none" stroke-linecap="round"><path d="M13 24V14M13 14L6 6M13 14l7-8"/></g></svg>응집소 β (항B 항체)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="win">
+    <div class="win-bar"><span class="title">응집 반응 실험실</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body">
+      <p style="margin-top:0">응집원과 응집소가 <b>열쇠와 자물쇠</b>처럼 딱 맞으면 서로 결합해서 적혈구들이 덩어리로 뭉쳐요. 이것이 <mark>응집 반응</mark>!
+      적혈구와 혈청을 골라 섞어 보세요.</p>
+      <div class="grid2">
+        <div>
+          <p class="jua" style="margin:0 0 4px">① 적혈구 고르기</p>
+          <div class="type-pick" id="bindCell"></div>
+        </div>
+        <div>
+          <p class="jua" style="margin:0 0 4px">② 혈청(항체) 고르기</p>
+          <div class="type-pick" id="bindSerum"></div>
+        </div>
+      </div>
+      <div class="btn-row" style="margin:14px 0">
+        <button class="btn primary" id="bindMix">섞기!</button>
+        <button class="btn" id="bindReset">초기화</button>
+      </div>
+      <svg id="bindSvg" viewBox="0 0 340 210" role="img" aria-label="응집 반응 시뮬레이션"></svg>
+      <div id="bindMsg" class="feedback" hidden></div>
+    </div>
+  </div>
+
+  <div class="win">
+    <div class="win-bar"><span class="title">한눈에 정리</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body">
+      <div class="tbl-scroll">
+      <table class="tbl">
+        <thead><tr><th>혈액형</th><th>A형</th><th>B형</th><th>AB형</th><th>O형</th></tr></thead>
+        <tbody>
+          <tr><th>응집원(적혈구)</th><td>A</td><td>B</td><td>A, B</td><td>없음</td></tr>
+          <tr><th>응집소(혈장)</th><td>β</td><td>α</td><td>없음</td><td>α, β</td></tr>
+          <tr><th>항A 혈청<br>응집</th><td>○</td><td>×</td><td>○</td><td>×</td></tr>
+          <tr><th>항B 혈청<br>응집</th><td>×</td><td>○</td><td>○</td><td>×</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="small muted" style="margin-bottom:0">💡 항원-항체 반응은 혈액형뿐 아니라 우리 몸의 <b>면역 과정</b>에서도 매우 중요한 역할을 해요. 몸에 들어온 병원체의 항원에 항체가 결합해 무력화시키죠!</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 2. EXPERIMENT ================= -->
+<section class="page" id="page-experiment">
+  <div class="win">
+    <div class="win-bar"><span class="title">가상 혈액형 판정 실험</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body">
+      <div class="steps" id="expSteps"></div>
+      <h2 class="step-title" id="expTitle"></h2>
+      <p id="expDesc" style="margin:4px 0 0"></p>
+      <div class="lab">
+        <div class="finger-box" id="fingerBox">
+          <svg id="finger" viewBox="0 0 140 170" role="button" aria-label="손가락">
+            <path d="M40 170V60a30 30 0 0 1 60 0v110z" fill="#F7D7C4" stroke="#3B2A2F" stroke-width="3"/>
+            <path d="M52 40a18 14 0 0 1 36 0v12a18 10 0 0 1-36 0z" fill="#FCEDE4" stroke="#3B2A2F" stroke-width="2" opacity=".9"/>
+            <path d="M48 110h44M48 130h44" stroke="#D9AE97" stroke-width="2"/>
+            <g id="swabMark" opacity="0"><circle cx="70" cy="70" r="22" fill="#CDE8F6" opacity=".7"/><text x="70" y="76" text-anchor="middle" font-family="Jua" font-size="15" fill="#2D6C9C">소독 ✓</text></g>
+            <g id="bloodDrop" opacity="0"><path d="M70 50c-6 10-11 15-11 21a11 11 0 0 0 22 0c0-6-5-11-11-21z" fill="#C3253A" stroke="#3B2A2F" stroke-width="2"/></g>
+            <g id="tool"></g>
+          </svg>
+        </div>
+        <div>
+          <div class="slide">
+            <div class="well a"><canvas id="wellA" width="200" height="200" aria-label="왼쪽 칸: 항A 혈청"></canvas><span class="lbl">항 A 혈청</span><div class="cnt" id="cntA"></div></div>
+            <div class="well b"><canvas id="wellB" width="200" height="200" aria-label="오른쪽 칸: 항B 혈청"></canvas><span class="lbl">항 B 혈청</span><div class="cnt" id="cntB"></div></div>
+          </div>
+          <div class="droppers" id="droppers" hidden>
+            <button class="btn dropper a" data-s="A">💧 항A 혈청 스포이트</button>
+            <button class="btn dropper b" data-s="B">💧 항B 혈청 스포이트</button>
+          </div>
+          <div class="btn-row" id="mixRow" style="margin-top:12px" hidden>
+            <button class="btn primary" id="shakeBtn">🫨 슬라이드 살살 흔들기</button>
+          </div>
+        </div>
+      </div>
+      <div id="judgeBox" hidden>
+        <p class="jua" style="margin:16px 0 0;font-size:19px">관찰 결과, 이 혈액은 무슨 형일까요?</p>
+        <div class="judge" id="judgeBtns"></div>
+      </div>
+      <div id="expFeedback"></div>
+      <div class="btn-row" style="margin-top:14px">
+        <button class="btn" id="expRestart">🔄 새 혈액 샘플로 다시 하기</button>
+      </div>
+      <p class="small muted" style="margin-bottom:0">실험 성공 횟수: <b id="expCount">0</b>회 · 맞히면 도장 획득!</p>
+    </div>
+  </div>
+
+  <div class="win">
+    <div class="win-bar"><span class="title">내 실험 결과 판정기</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body">
+      <p style="margin-top:0">부스에서 직접 한 실험 결과를 입력해 보세요. 피가 <b>오돌토돌 덩어리지면</b> 응집, <b>고르게 퍼져 있으면</b> 응집 없음이에요.</p>
+      <div class="yn"><span class="q">왼쪽 (항A 혈청)</span><button class="btn" data-real="A" data-v="1">응집 ○</button><button class="btn" data-real="A" data-v="0">응집 ×</button></div>
+      <div class="yn"><span class="q">오른쪽 (항B 혈청)</span><button class="btn" data-real="B" data-v="1">응집 ○</button><button class="btn" data-real="B" data-v="0">응집 ×</button></div>
+      <div id="realResult"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3. TRANSFUSION ================= -->
+<section class="page" id="page-transfusion">
+  <div class="win">
+    <div class="win-bar"><span class="title">응급실 수혈 게임</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body">
+      <p style="margin-top:0">환자에게 <b>줄 수 있는 혈액팩을 모두</b> 고른 뒤 수혈하기를 누르세요.
+      핵심은 <mark>받는 사람 혈장의 응집소가 주는 피의 응집원과 만나면 안 된다</mark>는 것!</p>
+      <div class="score" id="tfScore"></div>
+      <div class="patient" id="patient"></div>
+      <div class="bags" id="bags"></div>
+      <div class="btn-row" style="margin-top:16px">
+        <button class="btn primary" id="tfSubmit">💉 수혈하기</button>
+        <button class="btn" id="tfNext" hidden>다음 환자 ▶</button>
+      </div>
+      <div id="tfFeedback"></div>
+    </div>
+  </div>
+  <div class="win" id="tfSummary" hidden>
+    <div class="win-bar"><span class="title">수혈 관계도</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body">
+      <div class="flow">
+        <svg viewBox="0 0 300 300" role="img" aria-label="수혈 관계도: O형은 모두에게, A형과 B형은 AB형에게 줄 수 있음">
+          <defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#3B2A2F"/></marker></defs>
+          <g stroke="#3B2A2F" stroke-width="2.5" fill="none" marker-end="url(#arr)">
+            <path d="M150 62V112"/><path d="M128 52L70 132"/><path d="M172 52L230 132"/>
+            <path d="M70 172L128 238"/><path d="M230 172L172 238"/><path d="M150 62Q150 150 150 228" stroke-dasharray="5 5"/>
+          </g>
+          <g font-family="Jua" font-size="22" text-anchor="middle">
+            <circle cx="150" cy="40" r="24" fill="#fff" stroke="#3B2A2F" stroke-width="2.5"/><text x="150" y="48">O</text>
+            <circle cx="60" cy="152" r="24" fill="var(--agA-soft)" stroke="#3B2A2F" stroke-width="2.5"/><text x="60" y="160">A</text>
+            <circle cx="240" cy="152" r="24" fill="var(--agB-soft)" stroke="#3B2A2F" stroke-width="2.5"/><text x="240" y="160">B</text>
+            <circle cx="150" cy="262" r="28" fill="#F6CBD0" stroke="#3B2A2F" stroke-width="2.5"/><text x="150" y="270">AB</text>
+          </g>
+          <text x="8" y="22" font-size="13" font-family="Gowun Dodum" fill="#7A4E58">화살표 = 소량 수혈 가능</text>
+        </svg>
+      </div>
+      <p class="small muted" style="margin-bottom:0">⚠️ 실제 병원에서는 원칙적으로 <b>같은 혈액형끼리</b> 수혈하고, Rh식 혈액형 등 다른 검사도 함께 해요.
+      다른 혈액형 수혈은 응급 상황에서 소량만 가능해요. (주는 피의 응집소는 받는 사람 몸에서 크게 희석되기 때문이에요.)</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 4. GENETICS ================= -->
+<section class="page" id="page-genetics">
+  <div class="win">
+    <div class="win-bar"><span class="title">혈액형 유전 시뮬레이터</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body">
+      <p style="margin-top:0">ABO 혈액형은 부모로부터 각각 1개씩 물려받는 대립유전자(<b>A, B, O</b>)에 의해 결정돼요.
+      우열 관계는 <span class="pill accent">A = B &gt; O</span> → A와 B는 함께 있으면 둘 다 나타나고(AB형), O는 OO일 때만 나타나요.</p>
+      <div class="grid2">
+        <div><p class="jua" style="margin:0">👨 아빠 유전자형</p><div class="geno-pick" id="dadPick"></div></div>
+        <div><p class="jua" style="margin:0">👩 엄마 유전자형</p><div class="geno-pick" id="momPick"></div></div>
+      </div>
+      <div class="punnett" id="punnett"></div>
+      <div class="bars" id="bars"></div>
+    </div>
+  </div>
+  <div class="win">
+    <div class="win-bar"><span class="title">가족 혈액형 퍼즐</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-bar" style="background:var(--panel-2);border-bottom-width:1px"><span id="pzNum" class="jua"></span><span class="muted small" style="margin-left:auto" id="pzSolved"></span></div>
+    <div class="win-body">
+      <p id="pzQ" style="margin-top:0" class="jua"></p>
+      <div class="family" id="family"></div>
+      <p class="jua" style="margin:10px 0 0">? 의 유전자형은?</p>
+      <div class="geno-pick" id="pzPick"></div>
+      <div id="pzFeedback"></div>
+      <div class="btn-row" style="margin-top:12px"><button class="btn" id="pzPrev">◀ 이전</button><button class="btn" id="pzNext">다음 퍼즐 ▶</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5. QUIZ ================= -->
+<section class="page" id="page-quiz">
+  <div class="win">
+    <div class="win-bar"><span class="title">QUIZ TIME</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body" id="quizBody"></div>
+  </div>
+</section>
+
+</main>
+<footer>경북과학고등학교 · 창의과학한마당 ABO 혈액형 부스</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const NS = 'http://www.w3.org/2000/svg';
+const COL = { A: '#3B7DD8', B: '#E0A100', Bd: '#B07E00', blood: '#B3263A', ink: '#3B2A2F' };
+
+/* ---------- blood type model ---------- */
+const TYPES = {
+  A:  { ag: ['A'],      ab: ['B'] },
+  B:  { ag: ['B'],      ab: ['A'] },
+  AB: { ag: ['A', 'B'], ab: [] },
+  O:  { ag: [],         ab: ['A', 'B'] },
+};
+const TYPE_KEYS = ['A', 'B', 'AB', 'O'];
+const agglutinates = (type, serum) => TYPES[type].ag.includes(serum);
+const canGive = (donor, recip) => TYPES[donor].ag.every(a => TYPES[recip].ag.includes(a));
+const rand = arr => arr[Math.floor(Math.random() * arr.length)];
+
+/* ---------- toast ---------- */
+let toastT;
+function toast(msg) {
+  const t = $('#toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ---------- stamps (per-device convenience only) ---------- */
+const MISSIONS = [
+  ['principle', '원리'], ['experiment', '실험'], ['transfusion', '수혈'], ['genetics', '유전'], ['quiz', '퀴즈'],
+];
+let stamps = {};
+try { stamps = JSON.parse(localStorage.getItem('abo-stamps') || '{}') || {}; } catch (e) { stamps = {}; }
+function saveStamps() { try { localStorage.setItem('abo-stamps', JSON.stringify(stamps)); } catch (e) {} }
+function giveStamp(key) {
+  if (stamps[key]) return;
+  stamps[key] = true; saveStamps(); renderStamps();
+  const name = MISSIONS.find(m => m[0] === key)[1];
+  toast(`🎖️ '${name}' 도장 획득! (${Object.keys(stamps).length}/5)`);
+}
+function renderStamps() {
+  $('#stamps').innerHTML = MISSIONS.map(([k, n], i) =>
+    `<div class="stamp ${stamps[k] ? 'on' : ''}">${stamps[k] ? n + '<br>참 잘했어요' : 'MISSION<br>' + (i + 1)}</div>`).join('');
+  $$('#menu a').forEach(a => a.classList.toggle('done', !!stamps[a.dataset.key]));
+  $('#cert').classList.toggle('show', MISSIONS.every(([k]) => stamps[k]));
+}
+$('#resetStamps').addEventListener('click', () => {
+  if (!confirm('모은 도장을 모두 지울까요?')) return;
+  stamps = {}; saveStamps(); renderStamps();
+});
+
+/* ---------- routing ---------- */
+const PAGES = ['home', 'principle', 'experiment', 'transfusion', 'genetics', 'quiz'];
+function route() {
+  const id = (location.hash || '#home').slice(1);
+  const page = PAGES.includes(id) ? id : 'home';
+  $$('section.page').forEach(s => s.classList.toggle('active', s.id === 'page-' + page));
+  $$('nav.tabs a').forEach(a => {
+    if (a.getAttribute('href') === '#' + page) a.setAttribute('aria-current', 'page');
+    else a.removeAttribute('aria-current');
+  });
+  window.scrollTo(0, 0);
+  expRunning = page === 'experiment';
+  if (expRunning) loop();
+}
+window.addEventListener('hashchange', route);
+
+/* ======================================================
+   SVG helpers: red blood cell, antigens, antibodies
+   ====================================================== */
+function antigenShape(kind, x, y, ang, s = 1) {
+  const rot = `translate(${x} ${y}) rotate(${ang}) scale(${s})`;
+  return kind === 'A'
+    ? `<path transform="${rot}" d="M0 -9L8 5H-8z" fill="${COL.A}" stroke="${COL.ink}" stroke-width="1.5" stroke-linejoin="round"/>`
+    : `<rect transform="${rot}" x="-7" y="-8" width="14" height="13" rx="3" fill="${COL.B}" stroke="${COL.ink}" stroke-width="1.5"/>`;
+}
+function rbc(type, cx, cy, r, opts = {}) {
+  const ags = TYPES[type].ag;
+  const n = opts.n || 10;
+  let s = `<g>`;
+  s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#D8344A" stroke="${COL.ink}" stroke-width="${opts.sw || 3}"/>`;
+  s += `<ellipse cx="${cx}" cy="${cy}" rx="${r * .55}" ry="${r * .45}" fill="#B3263A" opacity=".55"/>`;
+  s += `<ellipse cx="${cx - r * .35}" cy="${cy - r * .45}" rx="${r * .18}" ry="${r * .09}" fill="#fff" opacity=".45" transform="rotate(-30 ${cx - r * .35} ${cy - r * .45})"/>`;
+  if (ags.length) {
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2 - Math.PI / 2;
+      const kind = ags[i % ags.length];
+      const ex = cx + Math.cos(a) * (r + 6 * (opts.s || 1)), ey = cy + Math.sin(a) * (r + 6 * (opts.s || 1));
+      s += antigenShape(kind, ex, ey, a * 180 / Math.PI + 90, opts.s || 1);
+    }
+  }
+  return s + '</g>';
+}
+// Y-shaped antibody; tips carry the "lock" matching the antigen shape
+function antibody(kind, x, y, ang, s = 1) {
+  const c = kind === 'A' ? COL.A : COL.Bd;
+  const tip = kind === 'A'
+    ? (tx, ty) => `<path d="M${tx - 6} ${ty - 7}L${tx} ${ty + 3}L${tx + 6} ${ty - 7}" stroke="${c}" stroke-width="3" fill="none" stroke-linejoin="round"/>`
+    : (tx, ty) => `<path d="M${tx - 6} ${ty - 7}V${ty + 2}H${tx + 6}V${ty - 7}" stroke="${c}" stroke-width="3" fill="none" stroke-linejoin="round"/>`;
+  return `<g transform="translate(${x} ${y}) rotate(${ang}) scale(${s})" stroke-linecap="round">
+    <path d="M0 18V2M0 2L-11 -10M0 2L11 -10" stroke="${c}" stroke-width="4" fill="none"/>
+    <g transform="translate(-13 -13) rotate(-42)">${tip(0, -2)}</g><g transform="translate(13 -13) rotate(42)">${tip(0, -2)}</g>
+  </g>`;
+}
+
+/* ======================================================
+   1. PRINCIPLE
+   ====================================================== */
+let princType = 'A';
+function typeButtons(container, keys, cur, onPick, label = k => k + '형') {
+  container.innerHTML = keys.map(k => `<button class="btn ${k === cur ? 'sel' : ''}" data-k="${k}">${label(k)}</button>`).join('');
+  container.onclick = e => {
+    const b = e.target.closest('button'); if (!b) return;
+    $$('button', container).forEach(x => x.classList.toggle('sel', x === b));
+    onPick(b.dataset.k);
+  };
+}
+function renderPrinciple() {
+  const t = TYPES[princType];
+  $('#rbcView').innerHTML = rbc(princType, 100, 100, 62, { n: 12, s: 1.3 });
+  $('#rbcText').innerHTML = t.ag.length
+    ? `응집원 <b>${t.ag.join(', ')}</b> 이(가) 있어요`
+    : `응집원이 <b>없어요</b> (매끈한 적혈구)`;
+  let p = `<rect x="6" y="6" width="188" height="188" rx="16" fill="#FFF3C9" opacity=".7"/>`;
+  const spots = [[55, 60, -20], [145, 55, 25], [55, 145, 15], [145, 150, -30]];
+  if (t.ab.length) {
+    spots.forEach(([x, y, a], i) => { p += antibody(t.ab[i % t.ab.length], x, y, a, 1.5); });
+  } else {
+    p += `<text x="100" y="108" text-anchor="middle" font-family="Jua" font-size="20" fill="${COL.ink}" opacity=".6">응집소 없음</text>`;
+  }
+  $('#plasmaView').innerHTML = p;
+  const names = { A: 'α (항A)', B: 'β (항B)' };
+  $('#plasmaText').innerHTML = t.ab.length
+    ? `응집소 <b>${t.ab.map(k => names[k]).join(', ')}</b> 이(가) 있어요`
+    : `응집소가 <b>없어요</b>`;
+}
+typeButtons($('#typePick'), TYPE_KEYS, princType, k => { princType = k; renderPrinciple(); });
+
+/* --- binding simulator --- */
+let bindCell = 'A', bindSerum = 'A', bindTried = new Set();
+typeButtons($('#bindCell'), TYPE_KEYS, bindCell, k => { bindCell = k; drawBind(false); }, k => k + '형 적혈구');
+typeButtons($('#bindSerum'), ['A', 'B'], bindSerum, k => { bindSerum = k; drawBind(false); }, k => `항${k} 혈청`);
+const CELL_POS = [[45, 50], [130, 40], [225, 55], [300, 45], [75, 150], [170, 125], [255, 160], [310, 120], [140, 180]];
+const CLUMP_POS = [[130, 78], [162, 70], [194, 82], [118, 110], [150, 106], [184, 114], [214, 104], [140, 140], [176, 142]];
+function drawBind(mixed) {
+  const svg = $('#bindSvg');
+  let s = `<rect x="0" y="0" width="340" height="210" fill="${bindSerum === 'A' ? '#E6F0FC' : '#FFF6D6'}"/>`;
+  s += `<text x="10" y="200" font-family="Jua" font-size="13" fill="${COL.ink}" opacity=".6">${bindCell}형 적혈구 + 항${bindSerum} 혈청</text>`;
+  const agg = agglutinates(bindCell, bindSerum);
+  CELL_POS.forEach(([x, y], i) => {
+    s += `<g class="mv" data-i="${i}" style="transform:translate(${x}px,${y}px)">${rbc(bindCell, 0, 0, 15, { n: 7, s: .7, sw: 2 })}</g>`;
+  });
+  // antibodies: free-floating, or bridging the clump
+  const free = [[90, 95, 20], [205, 30, -30], [270, 100, 10], [30, 110, -15], [215, 190, 30], [100, 20, 45]];
+  const bridge = [[146, 74, 90], [178, 76, 90], [134, 94, 0], [167, 90, 10], [199, 98, -10], [158, 124, 0], [134, 125, -20], [200, 128, 30]];
+  free.forEach(([x, y, a]) => { s += `<g class="ab free" style="opacity:${mixed && agg ? 0 : 1}">${antibody(bindSerum, x, y, a, .75)}</g>`; });
+  if (mixed && agg) bridge.forEach(([x, y, a]) => { s += `<g class="ab" style="opacity:0">${antibody(bindSerum, x, y, a, .6)}</g>`; });
+  svg.innerHTML = s;
+  $('#bindMsg').hidden = true;
+  if (mixed) {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      $$('.mv', svg).forEach(g => {
+        const i = +g.dataset.i;
+        const [tx, ty] = agg ? CLUMP_POS[i] : [CELL_POS[i][0] + (Math.random() * 16 - 8), CELL_POS[i][1] + (Math.random() * 16 - 8)];
+        g.style.transform = `translate(${tx}px,${ty}px)`;
+      });
+      $$('.ab:not(.free)', svg).forEach(g => { g.style.opacity = 1; });
+    }));
+    const box = $('#bindMsg');
+    box.hidden = false;
+    box.className = 'feedback ' + (agg ? 'no' : 'ok');
+    box.innerHTML = agg
+      ? `<h3>응집 발생! 🔴</h3>${bindCell}형 적혈구 표면의 <b>응집원 ${bindSerum}</b>에 항${bindSerum} 항체가 딱 맞게 결합해서, 하나의 항체가 적혈구 두 개를 붙잡아요. 그래서 적혈구들이 덩어리로 뭉쳤어요.`
+      : `<h3>응집 없음 🟢</h3>${bindCell}형 적혈구에는 <b>응집원 ${bindSerum}</b>이(가) 없어서 항${bindSerum} 항체가 결합할 곳이 없어요. 적혈구가 고르게 흩어져 있어요.`;
+    bindTried.add(agg ? 'y' : 'n');
+    if (bindTried.size === 2) giveStamp('principle');
+    else if (!stamps.principle) setTimeout(() => toast(agg ? '이번엔 응집이 안 되는 조합도 찾아봐요!' : '이번엔 응집이 되는 조합도 찾아봐요!'), 1600);
+  }
+}
+$('#bindMix').addEventListener('click', () => drawBind(true));
+$('#bindReset').addEventListener('click', () => drawBind(false));
+
+/* ======================================================
+   2. VIRTUAL EXPERIMENT
+   ====================================================== */
+const STEPS = [
+  { t: 'STEP 1 · 소독하기', d: '알콜솜으로 피를 뽑을 손가락을 소독해요. (혈액스틱 두 개도 함께 소독!) 👉 손가락을 눌러 보세요.' },
+  { t: 'STEP 2 · 피 내기', d: '란셋으로 소독한 부위를 살짝 찔러, 짜듯이 피를 내요. 👉 손가락을 눌러 보세요.' },
+  { t: 'STEP 3 · 슬라이드에 피 묻히기', d: '혈액형 판정 슬라이드의 양쪽 칸을 눌러 피를 묻혀요. 공기 중에 오래 두면 피가 응고되니 빠르게!' },
+  { t: 'STEP 4 · 혈청 떨어뜨리기', d: '항A 혈청은 왼쪽, 항B 혈청은 오른쪽에 각각 4방울! 스포이트를 고른 뒤 칸을 눌러 떨어뜨려요.' },
+  { t: 'STEP 5 · 섞고 관찰하기', d: '칸 위를 손가락으로 문질러 혈액스틱으로 젓거나, 흔들기 버튼을 눌러 섞어요. 피가 뭉치는지 관찰!' },
+  { t: '판정하기', d: '왼쪽(항A)과 오른쪽(항B)에서 응집이 일어났는지 보고 혈액형을 판정해요.' },
+];
+const exp = { step: 0, type: 'A', blood: { A: false, B: false }, drops: { A: 0, B: 0 }, mix: { A: 0, B: 0 }, dropper: null, answered: false };
+let expWins = 0;
+const wells = {
+  A: { cv: $('#wellA'), serum: '#4F8FE0', parts: [] },
+  B: { cv: $('#wellB'), serum: '#F2CF3E', parts: [] },
+};
+function makeParticles(well, agg) {
+  const N = 230, R = 100;
+  const clumps = [];
+  const nC = 6 + Math.floor(Math.random() * 3);
+  for (let i = 0; i < nC; i++) {
+    const a = Math.random() * Math.PI * 2, d = Math.sqrt(Math.random()) * R * .55;
+    clumps.push([R + Math.cos(a) * d, R + Math.sin(a) * d, 8 + Math.random() * 7]);
+  }
+  well.parts = Array.from({ length: N }, () => {
+    const a = Math.random() * Math.PI * 2, d = Math.sqrt(Math.random()) * 20;
+    const sx = R + Math.cos(a) * d, sy = R + Math.sin(a) * d;
+    let tx, ty;
+    if (agg) {
+      const c = rand(clumps);
+      const aa = Math.random() * Math.PI * 2, dd = Math.sqrt(Math.random()) * c[2];
+      tx = c[0] + Math.cos(aa) * dd; ty = c[1] + Math.sin(aa) * dd;
+    } else {
+      const aa = Math.random() * Math.PI * 2, dd = Math.sqrt(Math.random()) * R * .84;
+      tx = R + Math.cos(aa) * dd; ty = R + Math.sin(aa) * dd;
+    }
+    return { sx, sy, tx, ty, ph: Math.random() * 6.28, r: 2 + Math.random() * 1.2 };
+  });
+  well.agg = agg;
+}
+function newSample() {
+  Object.assign(exp, { step: 0, type: rand(TYPE_KEYS), blood: { A: false, B: false }, drops: { A: 0, B: 0 }, mix: { A: 0, B: 0 }, dropper: null, answered: false });
+  makeParticles(wells.A, agglutinates(exp.type, 'A'));
+  makeParticles(wells.B, agglutinates(exp.type, 'B'));
+  $('#swabMark').setAttribute('opacity', 0);
+  $('#bloodDrop').setAttribute('opacity', 0);
+  $('#expFeedback').innerHTML = '';
+  $$('.dropper').forEach(b => b.classList.remove('sel'));
+  renderExp();
+}
+function setStep(n) { exp.step = n; renderExp(); }
+function renderExp() {
+  const s = exp.step;
+  $('#expSteps').innerHTML = STEPS.map((x, i) => `<span class="${i === s ? 'on' : i < s ? 'done' : ''}">${i < 5 ? i + 1 : '판정'}${i < s ? ' ✓' : ''}</span>`).join('');
+  $('#expTitle').textContent = STEPS[s].t;
+  $('#expDesc').textContent = STEPS[s].d;
+  $('#fingerBox').style.display = s <= 1 ? '' : 'none';
+  $('#droppers').hidden = s !== 3;
+  $('#mixRow').hidden = s !== 4;
+  $('#judgeBox').hidden = s !== 5;
+  $('#cntA').textContent = s >= 3 ? `혈청 ${exp.drops.A}/4 방울` : '';
+  $('#cntB').textContent = s >= 3 ? `혈청 ${exp.drops.B}/4 방울` : '';
+  $('#expCount').textContent = expWins;
+}
+$('#finger').addEventListener('click', () => {
+  if (exp.step === 0) {
+    $('#swabMark').setAttribute('opacity', 1);
+    toast('🧴 쓱싹쓱싹, 소독 완료!');
+    setTimeout(() => setStep(1), 500);
+  } else if (exp.step === 1) {
+    $('#swabMark').setAttribute('opacity', 0);
+    $('#bloodDrop').setAttribute('opacity', 1);
+    toast('🩸 톡! 피 한 방울이 나왔어요');
+    setTimeout(() => setStep(2), 700);
+  }
+});
+$('#droppers').addEventListener('click', e => {
+  const b = e.target.closest('.dropper'); if (!b) return;
+  exp.dropper = b.dataset.s;
+  $$('.dropper').forEach(x => x.classList.toggle('sel', x === b));
+});
+function tapWell(side) {
+  if (exp.step === 2) {
+    if (exp.blood[side]) return;
+    exp.blood[side] = true;
+    if (exp.blood.A && exp.blood.B) setTimeout(() => setStep(3), 400);
+  } else if (exp.step === 3) {
+    if (!exp.dropper) { toast('먼저 스포이트를 골라 주세요!'); return; }
+    if (exp.dropper !== side) {
+      toast(side === 'A' ? '왼쪽 칸에는 항A 혈청을 떨어뜨려요!' : '오른쪽 칸에는 항B 혈청을 떨어뜨려요!');
+      return;
+    }
+    if (exp.drops[side] >= 4) { toast('4방울이면 충분해요!'); return; }
+    exp.drops[side]++;
+    renderExp();
+    if (exp.drops.A === 4 && exp.drops.B === 4) setTimeout(() => setStep(4), 400);
+  }
+}
+let shaking = false;
+function addMix(side, amt) {
+  if (exp.step !== 4) return;
+  exp.mix[side] = Math.min(1, exp.mix[side] + amt);
+  if (exp.mix.A >= 1 && exp.mix.B >= 1 && exp.step === 4) setTimeout(() => { if (exp.step === 4) setStep(5); }, 600);
+}
+['A', 'B'].forEach(side => {
+  const cv = wells[side].cv;
+  let last = null;
+  cv.addEventListener('pointerdown', e => { tapWell(side); last = [e.clientX, e.clientY]; cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener('pointermove', e => {
+    if (!last || exp.step !== 4) return;
+    const d = Math.hypot(e.clientX - last[0], e.clientY - last[1]);
+    last = [e.clientX, e.clientY];
+    addMix(side, d / 700);
+  });
+  cv.addEventListener('pointerup', () => { last = null; });
+  cv.addEventListener('pointercancel', () => { last = null; });
+});
+$('#shakeBtn').addEventListener('click', () => {
+  if (shaking) return;
+  shaking = true;
+  const slide = $('.slide');
+  slide.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(-3deg)' }, { transform: 'rotate(3deg)' }, { transform: 'rotate(0)' }], { duration: 400, iterations: 4 });
+  const t0 = performance.now();
+  const startA = exp.mix.A, startB = exp.mix.B;
+  (function tick(t) {
+    const p = Math.min(1, (t - t0) / 1600);
+    exp.mix.A = Math.max(exp.mix.A, startA + (1 - startA) * p);
+    exp.mix.B = Math.max(exp.mix.B, startB + (1 - startB) * p);
+    if (p < 1) requestAnimationFrame(tick); else { shaking = false; addMix('A', 0); }
+  })(t0);
+});
+const ease = p => p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+function drawWell(side, now) {
+  const w = wells[side], cv = w.cv;
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  const size = 200;
+  if (cv.width !== size * dpr) { cv.width = size * dpr; cv.height = size * dpr; }
+  const g = cv.getContext('2d');
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  g.clearRect(0, 0, size, size);
+  const R = 100;
+  // glass well
+  g.save();
+  g.beginPath(); g.arc(R, R, R - 3, 0, Math.PI * 2); g.closePath();
+  g.fillStyle = '#ffffff'; g.fill();
+  g.clip();
+  const drops = exp.drops[side];
+  if (drops) { g.globalAlpha = .15 + .5 * drops / 4; g.fillStyle = w.serum; g.fillRect(0, 0, size, size); g.globalAlpha = 1; }
+  const m = ease(exp.mix[side]);
+  if (exp.blood[side]) {
+    // background tint from spread blood (non-agglutinating spreads evenly → pink/orange wash)
+    if (!w.agg && m > 0) { g.globalAlpha = .38 * m; g.fillStyle = '#D24A57'; g.fillRect(0, 0, size, size); g.globalAlpha = 1; }
+    if (m < 1) {
+      g.globalAlpha = .9 * (1 - m);
+      g.beginPath(); g.arc(R, R, 24, 0, Math.PI * 2); g.fillStyle = '#B3263A'; g.fill();
+      g.globalAlpha = 1;
+    }
+    const t = now / 1000;
+    for (const p of w.parts) {
+      const jit = w.agg ? .4 : 1.6;
+      const x = p.sx + (p.tx - p.sx) * m + Math.sin(t * 1.3 + p.ph) * jit * m;
+      const y = p.sy + (p.ty - p.sy) * m + Math.cos(t * 1.1 + p.ph) * jit * m;
+      g.beginPath(); g.arc(x, y, w.agg ? p.r * 1.15 : p.r * (1 - .25 * m), 0, Math.PI * 2);
+      g.fillStyle = w.agg ? (m > .5 ? '#7E1726' : '#B3263A') : '#B3263A';
+      g.globalAlpha = w.agg ? 1 : 1 - .45 * m;
+      g.fill();
+    }
+    g.globalAlpha = 1;
+  }
+  g.restore();
+  // rim + glare
+  g.beginPath(); g.arc(R, R, R - 3, 0, Math.PI * 2);
+  g.lineWidth = 3; g.strokeStyle = COL.ink; g.stroke();
+  g.beginPath(); g.arc(R, R, R - 14, Math.PI * 1.1, Math.PI * 1.45);
+  g.lineWidth = 5; g.strokeStyle = 'rgba(255,255,255,.8)'; g.lineCap = 'round'; g.stroke();
+  // hint
+  if ((exp.step === 2 && !exp.blood[side]) || (exp.step === 3 && exp.dropper === side && drops < 4) || (exp.step === 4 && exp.mix[side] < 1)) {
+    const a = .35 + .3 * Math.sin(now / 250);
+    g.beginPath(); g.arc(R, R, R - 8, 0, Math.PI * 2);
+    g.setLineDash([8, 8]); g.lineWidth = 3; g.strokeStyle = `rgba(162,62,85,${a})`; g.stroke(); g.setLineDash([]);
+  }
+}
+let expRunning = false, rafId = 0;
+function loop() {
+  cancelAnimationFrame(rafId);
+  const frame = now => {
+    if (!expRunning) return;
+    drawWell('A', now); drawWell('B', now);
+    rafId = requestAnimationFrame(frame);
+  };
+  rafId = requestAnimationFrame(frame);
+}
+function explainType(type) {
+  const a = agglutinates(type, 'A'), b = agglutinates(type, 'B');
+  return `왼쪽(항A 혈청) <b>${a ? '응집 ○' : '응집 ×'}</b>, 오른쪽(항B 혈청) <b>${b ? '응집 ○' : '응집 ×'}</b> →
+    적혈구에 응집원 ${TYPES[type].ag.length ? '<b>' + TYPES[type].ag.join('와 ') + '</b>가 있으므로' : '<b>A도 B도 없으므로</b>'} <mark>${type}형</mark>이에요.`;
+}
+$('#judgeBtns').innerHTML = TYPE_KEYS.map(k => `<button class="btn" data-k="${k}">${k}형</button>`).join('');
+$('#judgeBtns').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || exp.answered) return;
+  exp.answered = true;
+  const ok = b.dataset.k === exp.type;
+  if (ok) { expWins++; giveStamp('experiment'); renderExp(); }
+  $('#expFeedback').innerHTML = `<div class="feedback ${ok ? 'ok' : 'no'}"><h3>${ok ? '정답! 🎉' : `아쉬워요! 정답은 ${exp.type}형`}</h3>${explainType(exp.type)}</div>`;
+});
+$('#expRestart').addEventListener('click', newSample);
+
+// real result helper
+const real = { A: null, B: null };
+$$('[data-real]').forEach(b => b.addEventListener('click', () => {
+  real[b.dataset.real] = b.dataset.v === '1';
+  $$(`[data-real="${b.dataset.real}"]`).forEach(x => x.classList.toggle('sel', x === b));
+  if (real.A === null || real.B === null) return;
+  const type = TYPE_KEYS.find(k => agglutinates(k, 'A') === real.A && agglutinates(k, 'B') === real.B);
+  $('#realResult').innerHTML = `<div class="feedback ok"><h3>당신의 혈액형은 ${type}형!</h3>${explainType(type)}<br>
+    <span class="small">혈장에는 응집소 ${TYPES[type].ab.length ? TYPES[type].ab.map(x => x === 'A' ? 'α' : 'β').join(', ') : '없음'} ·
+    가능한 유전자형: <b>${GENOS.filter(g => pheno(g) === type).join(', ')}</b></span></div>`;
+}));
+
+/* ======================================================
+   3. TRANSFUSION GAME
+   ====================================================== */
+const ROUNDS = 5;
+const PATIENTS = ['교통사고 환자', '수술 중인 환자', '빈혈이 심한 환자', '출혈이 많은 환자', '응급 수술 환자'];
+const tf = { round: 0, score: 0, patient: 'A', picked: new Set(), done: false, order: [] };
+function bagSVG(type) {
+  return `<svg viewBox="0 0 64 80" aria-hidden="true">
+    <path d="M28 2h8v8h-8z" fill="#ddd" stroke="${COL.ink}" stroke-width="2"/>
+    <rect x="8" y="10" width="48" height="62" rx="12" fill="#fff" stroke="${COL.ink}" stroke-width="2.5"/>
+    <rect x="12" y="30" width="40" height="38" rx="9" fill="#C3253A"/>
+    <rect x="16" y="18" width="32" height="14" rx="4" fill="${type === 'A' ? '#DCE9FB' : type === 'B' ? '#FFF1C2' : type === 'AB' ? '#F6CBD0' : '#fff'}" stroke="${COL.ink}" stroke-width="1.5"/>
+    <text x="32" y="29" text-anchor="middle" font-family="Jua" font-size="11" fill="${COL.ink}">${type}</text>
+  </svg>`;
+}
+function startTransfusion() {
+  // make sure every type shows up at least once
+  tf.order = [...TYPE_KEYS].sort(() => Math.random() - .5);
+  tf.order.push(rand(TYPE_KEYS));
+  tf.round = 0; tf.score = 0;
+  $('#tfSummary').hidden = true;
+  nextPatient();
+}
+function nextPatient() {
+  tf.patient = tf.order[tf.round];
+  tf.picked = new Set(); tf.done = false;
+  const T = TYPES[tf.patient];
+  $('#tfScore').textContent = `환자 ${tf.round + 1} / ${ROUNDS} · 점수 ${tf.score}`;
+  $('#patient').innerHTML = `
+    <svg viewBox="0 0 60 60" width="58" height="58" aria-hidden="true"><circle cx="30" cy="22" r="12" fill="#F7D7C4" stroke="${COL.ink}" stroke-width="2.5"/><path d="M8 58c2-14 10-20 22-20s20 6 22 20" fill="#9CC3E8" stroke="${COL.ink}" stroke-width="2.5"/><path d="M26 44h8M30 40v8" stroke="#C0392B" stroke-width="3"/></svg>
+    <div><div class="small muted">${rand(PATIENTS)}</div><div class="big">${tf.patient}형</div>
+    <div class="small">혈장 속 응집소: <b>${T.ab.length ? T.ab.map(x => x === 'A' ? 'α(항A)' : 'β(항B)').join(', ') : '없음'}</b></div></div>`;
+  $('#bags').innerHTML = TYPE_KEYS.map(k => `<button class="bag" data-k="${k}" aria-pressed="false">${bagSVG(k)}<span class="t">${k}형</span><span class="mark"></span></button>`).join('');
+  $('#tfFeedback').innerHTML = '';
+  $('#tfSubmit').hidden = false; $('#tfNext').hidden = true;
+}
+$('#bags').addEventListener('click', e => {
+  const b = e.target.closest('.bag'); if (!b || tf.done) return;
+  const k = b.dataset.k;
+  tf.picked.has(k) ? tf.picked.delete(k) : tf.picked.add(k);
+  b.setAttribute('aria-pressed', tf.picked.has(k));
+});
+$('#tfSubmit').addEventListener('click', () => {
+  if (tf.round === -1) { $('#tfSubmit').textContent = '💉 수혈하기'; startTransfusion(); return; }
+  if (!tf.picked.size) { toast('혈액팩을 하나 이상 골라 주세요!'); return; }
+  tf.done = true;
+  const p = tf.patient;
+  let allRight = true;
+  const lines = [];
+  $$('.bag').forEach(b => {
+    const k = b.dataset.k, ok = canGive(k, p), picked = tf.picked.has(k);
+    if (ok !== picked) allRight = false;
+    b.classList.add(ok ? 'res-ok' : 'res-no');
+    $('.mark', b).textContent = ok ? '○' : '×';
+    if (picked && !ok) {
+      const bad = TYPES[k].ag.filter(a => !TYPES[p].ag.includes(a));
+      lines.push(`❌ <b>${k}형</b> 피의 응집원 <b>${bad.join(', ')}</b>이(가) 환자 혈장의 응집소 ${bad.map(x => x === 'A' ? 'α' : 'β').join(', ')}와 만나 <b>응집</b>돼요!`);
+    } else if (!picked && ok) {
+      lines.push(`🔸 <b>${k}형</b>도 줄 수 있었어요. ${TYPES[k].ag.length ? `응집원 ${TYPES[k].ag.join(', ')}이(가) 환자에게도 있어서` : '응집원이 없어서'} 응집이 일어나지 않아요.`);
+    }
+  });
+  if (allRight) tf.score++;
+  $('#tfScore').textContent = `환자 ${tf.round + 1} / ${ROUNDS} · 점수 ${tf.score}`;
+  $('#tfFeedback').innerHTML = `<div class="feedback ${allRight ? 'ok' : 'no'}"><h3>${allRight ? '완벽한 수혈! 환자가 회복했어요 💖' : '앗, 다시 확인해 봐요'}</h3>
+    ${lines.join('<br>') || `${p}형 환자에게 줄 수 있는 피: <b>${TYPE_KEYS.filter(k => canGive(k, p)).join(', ')}형</b>`}</div>`;
+  $('#tfSubmit').hidden = true;
+  $('#tfNext').hidden = false;
+  $('#tfNext').textContent = tf.round + 1 >= ROUNDS ? '결과 보기 ▶' : '다음 환자 ▶';
+});
+$('#tfNext').addEventListener('click', () => {
+  tf.round++;
+  if (tf.round < ROUNDS) { nextPatient(); return; }
+  $('#tfScore').textContent = `최종 점수 ${tf.score} / ${ROUNDS}`;
+  $('#patient').innerHTML = `<div><div class="big">${tf.score === ROUNDS ? '🏆 명의 탄생!' : tf.score >= 3 ? '👍 잘했어요!' : '💪 다시 도전!'}</div>
+    <div class="small">${tf.score >= 3 ? '응급실 미션 완료! 아래 수혈 관계도로 정리해 봐요.' : '3명 이상 살리면 도장을 받을 수 있어요.'}</div></div>`;
+  $('#bags').innerHTML = ''; $('#tfFeedback').innerHTML = '';
+  $('#tfNext').hidden = true; $('#tfSubmit').hidden = false; $('#tfSubmit').textContent = '🔄 다시 하기';
+  $('#tfSummary').hidden = false;
+  if (tf.score >= 3) giveStamp('transfusion');
+  tf.done = true; tf.round = -1;
+});
+
+/* ======================================================
+   4. GENETICS
+   ====================================================== */
+const GENOS = ['AA', 'AO', 'BB', 'BO', 'AB', 'OO'];
+function pheno(g) {
+  const a = g.includes('A'), b = g.includes('B');
+  return a && b ? 'AB' : a ? 'A' : b ? 'B' : 'O';
+}
+const norm = (x, y) => { const o = 'ABO'; return [x, y].sort((p, q) => o.indexOf(p) - o.indexOf(q)).join(''); };
+function cross(g1, g2) { const r = []; for (const a of g1) for (const b of g2) r.push(norm(a, b)); return r; }
+let dadG = 'AO', momG = 'BO';
+function renderPunnett() {
+  const kids = cross(dadG, momG);
+  let h = `<div class="corner"></div><div class="h">엄마 ${momG[0]}</div><div class="h">엄마 ${momG[1]}</div>`;
+  for (let i = 0; i < 2; i++) {
+    h += `<div class="h">아빠 ${dadG[i]}</div>`;
+    for (let j = 0; j < 2; j++) { const g = norm(dadG[i], momG[j]); h += `<div>${g}<small>${pheno(g)}형</small></div>`; }
+  }
+  $('#punnett').innerHTML = h;
+  $('#bars').innerHTML = TYPE_KEYS.map(k => {
+    const p = kids.filter(g => pheno(g) === k).length * 25;
+    return `<div class="bar"><span>${k}형</span><div class="track"><div class="fill" style="width:${p}%"></div></div><span>${p}%</span></div>`;
+  }).join('');
+}
+typeButtons($('#dadPick'), GENOS, dadG, k => { dadG = k; renderPunnett(); }, k => `${k} (${pheno(k)}형)`);
+typeButtons($('#momPick'), GENOS, momG, k => { momG = k; renderPunnett(); }, k => `${k} (${pheno(k)}형)`);
+
+// family puzzles: one parent unknown ('?'), others given as phenotypes
+const PUZZLES = [
+  { q: '아빠의 혈액형을 맞혀 보세요! (PPT 속 그 문제)', dad: '?', mom: 'A', kids: [['아들', 'O'], ['딸', 'AB']],
+    why: '아들이 O형(OO)이니 아빠도 O를 물려줘야 해요. 딸이 AB형인데 엄마는 A만 줄 수 있으니 B는 아빠가 줬어요. → 아빠는 <b>BO</b>!' },
+  { q: '엄마의 유전자형은?', dad: 'O', mom: '?', kids: [['아들', 'A'], ['딸', 'B']],
+    why: 'O형 아빠는 O만 물려줄 수 있어요. 아들의 A와 딸의 B는 모두 엄마에게서 왔어요. → 엄마는 <b>AB</b>!' },
+  { q: '아빠의 유전자형은?', dad: '?', mom: 'O', kids: [['아들', 'A'], ['딸', 'O']],
+    why: '엄마는 O만 줄 수 있어요. 아들의 A는 아빠가, 딸이 O형(OO)이니 아빠도 O를 갖고 있어요. → 아빠는 <b>AO</b>!' },
+  { q: '엄마의 유전자형은?', dad: 'AB', mom: '?', kids: [['아들', 'B'], ['딸', 'A'], ['막내', 'O']],
+    why: '함정 문제! AB형 아빠는 A나 B만 물려줄 수 있어서, 엄마가 누구든 O형(OO) 막내는 나올 수 없어요. → 이런 가족은 <b>불가능</b>! (아주 드문 돌연변이 예외는 빼고요)', impossible: true },
+  { q: '아빠의 유전자형은?', dad: '?', mom: 'B', kids: [['아들', 'AB'], ['딸', 'O']],
+    why: '딸이 OO이니 엄마는 BO, 아빠도 O를 가져요. 아들의 AB에서 엄마가 B를 줬으니 A는 아빠가 줬어요. → 아빠는 <b>AO</b>!' },
+];
+const genosOf = p => GENOS.filter(g => pheno(g) === p);
+function solvePuzzle(pz) {
+  const knownP = pz.dad === '?' ? pz.mom : pz.dad;
+  return GENOS.filter(g => genosOf(knownP).some(g2 => {
+    const ph = cross(g, g2).map(pheno);
+    return pz.kids.every(([, k]) => ph.includes(k));
+  }));
+}
+let pzIdx = 0;
+const pzSolved = new Set();
+function renderPuzzle() {
+  const pz = PUZZLES[pzIdx];
+  $('#pzNum').textContent = `퍼즐 ${pzIdx + 1} / ${PUZZLES.length}`;
+  $('#pzSolved').textContent = `해결 ${pzSolved.size}개 · 3개 해결하면 도장!`;
+  $('#pzQ').textContent = pz.q;
+  const person = (role, t, sex) => `<div class="person ${t === '?' ? 'q' : ''}"><span class="role ${sex}">${role}</span><span class="bt">${t === '?' ? '?' : t + '형'}</span></div>`;
+  $('#family').innerHTML = person('아빠', pz.dad, 'm') + person('엄마', pz.mom, 'f')
+    + `<div class="line">│ 자녀 │</div>` + pz.kids.map(([r, t]) => person(r, t, r === '딸' ? 'f' : 'm')).join('');
+  const opts = pz.impossible ? [...GENOS, '불가능'] : GENOS;
+  $('#pzPick').innerHTML = opts.map(g => `<button class="btn" data-g="${g}">${g === '불가능' ? '🤔 이런 가족은 불가능!' : g}</button>`).join('');
+  $('#pzFeedback').innerHTML = '';
+  $('#pzPrev').disabled = pzIdx === 0;
+}
+$('#pzPick').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const pz = PUZZLES[pzIdx];
+  const valid = solvePuzzle(pz);
+  const g = b.dataset.g;
+  const ok = pz.impossible ? (g === '불가능' && valid.length === 0) : valid.includes(g);
+  $$('button', $('#pzPick')).forEach(x => x.classList.toggle('sel', x === b));
+  let msg;
+  if (ok) {
+    pzSolved.add(pzIdx);
+    msg = `<h3>정답! 🎉</h3>${pz.why}`;
+    if (pzSolved.size >= 3) giveStamp('genetics');
+  } else if (g === '불가능') {
+    msg = `<h3>다시 생각해 봐요</h3>이 가족은 가능한 조합이 있어요. 아이들이 각각 어떤 대립유전자를 누구에게서 받았는지 따져 보세요.`;
+  } else {
+    msg = `<h3>아쉬워요!</h3>${g}라면 <b>${g[0]}</b> 또는 <b>${g[1]}</b>만 물려줄 수 있어요. 각 자녀가 받은 대립유전자를 다시 따져 보세요!`;
+  }
+  $('#pzFeedback').innerHTML = `<div class="feedback ${ok ? 'ok' : 'no'}">${msg}</div>`;
+  $('#pzSolved').textContent = `해결 ${pzSolved.size}개 · 3개 해결하면 도장!`;
+});
+$('#pzPrev').addEventListener('click', () => { if (pzIdx > 0) { pzIdx--; renderPuzzle(); } });
+$('#pzNext').addEventListener('click', () => { pzIdx = (pzIdx + 1) % PUZZLES.length; renderPuzzle(); });
+
+/* ======================================================
+   5. OX QUIZ
+   ====================================================== */
+const QUIZ = [
+  ['AB형은 A형에게 수혈을 받을 수 있다?', true, 'AB형의 혈장에는 응집소(항체)가 없어서, 어떤 피든 (소량) 수혈받을 수 있어요!'],
+  ['항 A 혈청에는 A 항원이 들어있다?', false, 'A 항원이 아니라 <b>A 항체(응집소 α)</b>가 들어있어요!'],
+  ['O형의 적혈구 표면에는 응집원이 없다?', true, 'O형 적혈구에는 응집원 A, B가 모두 없어요. 그래서 항A, 항B 혈청 어디에서도 응집되지 않아요.'],
+  ['항A·항B 혈청 모두에서 응집이 일어나면 O형이다?', false, '양쪽 모두 응집되면 응집원 A와 B를 모두 가진 <b>AB형</b>이에요. O형은 양쪽 모두 응집되지 않아요.'],
+  ['A형의 혈장에는 응집소 β(항B 항체)가 있다?', true, '내 적혈구에 없는 응집원(B)에 대한 응집소 β를 가지고 있어요.'],
+  ['O형 부모 사이에서 A형 아이가 태어날 수 있다?', false, 'O형 부모는 둘 다 OO라서 O만 물려줄 수 있어요. 자녀는 모두 O형이에요.'],
+  ['A형 부모 사이에서 O형 아이가 태어날 수 있다?', true, '부모가 모두 AO라면 각각 O를 물려줘서 OO(O형) 아이가 태어날 수 있어요. (확률 25%)'],
+  ['AB형과 O형 부모 사이에서 AB형 아이가 태어날 수 있다?', false, 'O형 부모는 O만 물려주므로 자녀는 AO(A형) 또는 BO(B형)만 가능해요.'],
+  ['항원-항체 반응은 우리 몸의 면역 과정에서도 중요한 역할을 한다?', true, '몸에 침입한 병원체의 항원에 항체가 결합해 무력화시키는 것도 같은 원리예요!'],
+];
+const qz = { i: 0, score: 0, order: [] };
+function startQuiz() {
+  qz.i = 0; qz.score = 0;
+  // keep the two PPT questions first, shuffle the rest
+  qz.order = [0, 1, ...[2, 3, 4, 5, 6, 7, 8].sort(() => Math.random() - .5)];
+  renderQuiz();
+}
+function renderQuiz() {
+  const body = $('#quizBody');
+  if (qz.i >= qz.order.length) {
+    const n = qz.order.length;
+    body.innerHTML = `<div style="text-align:center"><p class="quiz-q">${qz.score} / ${n} 정답!</p>
+      <p>${qz.score === n ? '🏆 만점! 혈액형 박사님이시군요!' : qz.score >= 6 ? '👍 훌륭해요!' : '💪 원리 미션을 다시 보고 도전해 봐요!'}</p>
+      <button class="btn primary" id="qzAgain">다시 풀기</button></div>`;
+    $('#qzAgain').onclick = startQuiz;
+    if (qz.score >= 6) giveStamp('quiz');
+    else toast('6문제 이상 맞히면 도장을 받아요!');
+    return;
+  }
+  const [q] = QUIZ[qz.order[qz.i]];
+  body.innerHTML = `<div class="prog"><i style="width:${qz.i / qz.order.length * 100}%"></i></div>
+    <div class="small muted">Q${qz.i + 1} / ${qz.order.length} · 점수 ${qz.score}</div>
+    <p class="quiz-q">${q}</p>
+    <div class="ox"><button class="btn o" data-v="1" aria-label="O">O</button><button class="btn x" data-v="0" aria-label="X">X</button></div>
+    <div id="qzFb"></div>`;
+  $('.ox', body).onclick = e => {
+    const b = e.target.closest('button'); if (!b || body.dataset.lock === '1') return;
+    body.dataset.lock = '1';
+    const [, ans, why] = QUIZ[qz.order[qz.i]];
+    const ok = (b.dataset.v === '1') === ans;
+    if (ok) qz.score++;
+    $$('.ox .btn', body).forEach(x => { if (x !== b) x.disabled = true; });
+    $('#qzFb').innerHTML = `<div class="feedback ${ok ? 'ok' : 'no'}"><h3>${ok ? '정답!' : '땡!'} 정답은 ${ans ? 'O' : 'X'}</h3>${why}</div>
+      <div style="text-align:center;margin-top:12px"><button class="btn primary" id="qzNext">${qz.i + 1 < qz.order.length ? '다음 문제 ▶' : '결과 보기 ▶'}</button></div>`;
+    $('#qzNext').onclick = () => { body.dataset.lock = '0'; qz.i++; renderQuiz(); };
+  };
+}
+
+/* ---------- init ---------- */
+renderStamps();
+renderPrinciple();
+drawBind(false);
+newSample();
+startTransfusion();
+renderPunnett();
+renderPuzzle();
+startQuiz();
+route();
+})();
+</script>
+</body>
+</html>
