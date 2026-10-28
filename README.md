@@ -1,4 +1,4 @@
-# 나의 ABO 혈액형 탐험
+# 혈액형 판별 실험을 통해 알아보는 나의 ABO 혈액형
 
 경북과학고등학교 창의과학한마당 **혈액형 판별 실험 부스**용 인터랙티브 게임 사이트입니다.
 
@@ -21,3 +21,9 @@
 3. 1~2분 뒤 https://jyh0315.github.io/blood/ 주소로 접속됩니다. 이 주소로 QR 코드를 만들어 부스에 붙이면 됩니다.
 
 미션별 바로가기 링크: 주소 뒤에 `#principle`, `#experiment`, `#transfusion`, `#genetics`, `#quiz`를 붙이세요.
+
+## 화면 모드 & QR
+- 화면 크기에 맞춰 **PC 화면**(부스 모니터용, 좌우 2단) / **폰 화면**이 자동으로 정해지고, 위쪽 💻/📱 버튼으로 바꿀 수 있어요.
+- PC 화면 홈에는 "내 폰으로 하기" QR이 보여요.
+- `qr-poster.png`, `qr-poster.pdf`: 부스에 붙일 A4 QR 포스터 (`qr.html`에서 바로 인쇄도 가능)
+- `assets/qr.png`, `assets/qr.svg`: QR 코드만 (https://jyh0315.github.io/blood/)

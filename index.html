@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light only">
-<title>나의 ABO 혈액형 탐험</title>
+<title>혈액형 판별 실험을 통해 알아보는 나의 ABO 혈액형</title>
+<meta property="og:title" content="혈액형 판별 실험을 통해 알아보는 나의 ABO 혈액형">
 <meta name="description" content="혈액형 판별 실험과 함께하는 ABO 혈액형 원리 인터랙티브 게임 - 경북과학고등학교 창의과학한마당">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,7 +57,14 @@ header.top{
 }
 .top-inner{max-width:960px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
 .brand{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink);font-family:"Jua";font-size:20px;white-space:nowrap}
-.brand svg{width:28px;height:28px}
+.brand svg{width:28px;height:28px;flex:none}
+.brand-t{display:flex;flex-direction:column;line-height:1.1;font-size:18px}
+.brand-t small{font-family:"Gowun Dodum";font-size:11px;color:var(--ink-2)}
+.view-btn{flex:none;font-family:"Jua";font-size:14px;border:2px solid var(--line);border-radius:999px;padding:3px 10px;background:var(--accent-soft);white-space:nowrap}
+.qr-box{display:flex;gap:20px;align-items:center}
+.qr-box img{width:200px;height:200px;border:2px solid var(--line);border-radius:12px;background:#fff;padding:6px;flex:none}
+.pc-only{display:none}
+body[data-view="pc"] .pc-only{display:block}
 nav.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-left:auto;padding:2px}
 nav.tabs::-webkit-scrollbar{display:none}
 nav.tabs a{
@@ -113,9 +121,9 @@ b.a{color:var(--agA)} b.b{color:#B07E00}
 .toast{
   position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);
   background:var(--ink);color:#fff;padding:10px 18px;border-radius:14px;font-family:"Jua";
-  transition:transform .3s;z-index:50;max-width:calc(100% - 32px);text-align:center;
+  transition:transform .3s,opacity .3s;z-index:50;max-width:calc(100% - 32px);text-align:center;opacity:0;pointer-events:none;
 }
-.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 
 .feedback{border:2px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:14px}
 .feedback.ok{background:var(--ok-soft)}
@@ -316,6 +324,46 @@ body[data-mode="senior"] .jr-only{display:none}
 @keyframes shake{20%{transform:translate(-8px,4px)}40%{transform:translate(7px,-5px)}60%{transform:translate(-5px,3px)}80%{transform:translate(3px,-2px)}}
 
 footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40px}
+/* ---------- PC view (booth monitor / laptop) ---------- */
+body[data-view="pc"]{font-size:17px}
+body[data-view="pc"] .wrap,body[data-view="pc"] .top-inner{max-width:1240px}
+body[data-view="pc"] .top-inner{flex-wrap:nowrap}
+body[data-view="pc"] nav.tabs{order:0;width:auto;margin-left:auto}
+body[data-view="pc"] .mode-chip{margin-left:0}
+body[data-view="pc"] .brand-t{font-size:22px}
+body[data-view="pc"] .brand-t small{font-size:13px}
+body[data-view="pc"] section.page.active{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;align-items:start}
+body[data-view="pc"] section.page > .guide,body[data-view="pc"] section.page > .win.full{grid-column:1/-1}
+body[data-view="pc"] #page-quiz .win{max-width:820px;width:100%;margin-left:auto;margin-right:auto}
+body[data-view="pc"] .hero h1{font-size:46px}
+body[data-view="pc"] .hero-chars img{width:190px}
+body[data-view="pc"] .start-chars img{width:200px}
+body[data-view="pc"] .modes .mode-card{padding:22px}
+body[data-view="pc"] .mode-card img{width:130px}
+body[data-view="pc"] .mode-card h2{font-size:34px}
+body[data-view="pc"] .guide img{width:110px}
+body[data-view="pc"] .guide .bubble{font-size:19px}
+body[data-view="pc"] #agSvg{max-width:560px}
+body[data-view="pc"] .well canvas{max-width:240px}
+body[data-view="pc"] .well{max-width:260px}
+body[data-view="pc"] .finger-box svg{width:170px}
+body[data-view="pc"] .quiz-q{font-size:34px}
+body[data-view="pc"] .ox .btn{width:150px;height:150px;font-size:80px}
+body[data-view="pc"] .menu{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+
+/* ---------- phone view (also forced on a wide screen) ---------- */
+body[data-view="phone"] .wrap,body[data-view="phone"] .top-inner{max-width:480px}
+body[data-view="phone"] .top-inner{flex-wrap:wrap}
+body[data-view="phone"] nav.tabs{margin-left:0;width:100%;order:3}
+body[data-view="phone"] .mode-chip{margin-left:auto}
+body[data-view="phone"] .grid2,body[data-view="phone"] .cell-stage,body[data-view="phone"] .lab,body[data-view="phone"] .modes{grid-template-columns:1fr}
+body[data-view="phone"] .hero{flex-direction:column-reverse;text-align:center}
+body[data-view="phone"] .win-body{padding:14px}
+body[data-view="phone"] .bags{grid-template-columns:repeat(2,1fr)}
+body[data-view="phone"] .qr-box{flex-direction:column;text-align:center}
+@media (max-width:380px){.vb-t{display:none}}
+@media (max-width:420px){.brand-t small{display:none}.brand-t{font-size:15px}.top-inner{gap:6px}.view-btn,.mode-chip{font-size:13px;padding:3px 7px}.icon-btn{width:34px;height:34px;font-size:16px}.brand svg{width:24px;height:24px}}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -324,10 +372,11 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
   <div class="top-inner">
     <a class="brand" href="#home" aria-label="처음으로">
       <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3C14 12 8 18 8 25a12 12 0 0 0 24 0c0-7-6-13-12-22z" fill="#B3263A" stroke="#3B2A2F" stroke-width="2.5"/><circle cx="16" cy="25" r="1.8" fill="#3B2A2F"/><circle cx="24" cy="25" r="1.8" fill="#3B2A2F"/><path d="M17 29q3 2.5 6 0" stroke="#3B2A2F" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
-      ABO 탐험
+      <span class="brand-t"><small>혈액형 판별 실험을 통해 알아보는</small>나의 ABO 혈액형</span>
     </a>
     <nav class="tabs" id="tabs" aria-label="게임 메뉴"></nav>
-    <button class="mode-chip" id="modeChip" title="모드 바꾸기"></button>
+    <button class="mode-chip" id="modeChip" title="모드 바꾸기" hidden></button>
+    <button class="view-btn" id="viewBtn" aria-label="화면 모드 바꾸기"></button>
     <button class="icon-btn" id="muteBtn" aria-label="효과음 끄기/켜기">🔊</button>
   </div>
 </header>
@@ -336,11 +385,11 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
 
 <!-- ================= START (mode select) ================= -->
 <section class="page" id="page-start">
-  <div class="win">
+  <div class="win full">
     <div class="win-bar"><span class="title">창의과학한마당</span><span class="dots"><i></i><i></i><i></i></span></div>
     <div class="win-body start-hero">
       <span class="pill">경북과학고등학교</span>
-      <h1>혈액형 판별 실험으로 알아보는<br>나의 ABO 혈액형</h1>
+      <h1>혈액형 판별 실험을 통해 알아보는<br>나의 ABO 혈액형</h1>
       <div class="start-chars"><img src="assets/duck_wave.png" alt="오리 캐릭터"><img src="assets/tower_wave.png" alt="첨성대 캐릭터"></div>
       <p class="jua" style="font-size:20px;margin:6px 0 0">안녕! 어떤 모드로 시작할까?</p>
       <div class="modes">
@@ -359,13 +408,13 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
 
 <!-- ================= HOME ================= -->
 <section class="page" id="page-home">
-  <div class="win">
+  <div class="win full">
     <div class="win-bar"><span class="title">창의과학한마당</span><span class="dots"><i></i><i></i><i></i></span></div>
     <div class="win-body">
       <div class="hero">
         <div>
           <span class="pill">경북과학고등학교</span>
-          <h1>혈액형 판별 실험으로 알아보는<br>나의 ABO 혈액형</h1>
+          <h1>혈액형 판별 실험을 통해 알아보는<br>나의 ABO 혈액형</h1>
           <p class="muted">실험을 기다리는 동안, 혹은 실험을 마친 뒤에 게임으로 혈액형의 원리를 탐험해 보세요.
           <span id="heroGoal"></span></p>
           <a class="btn primary" id="startNext" href="#principle">▶ LEVEL 1부터 시작!</a>
@@ -375,7 +424,7 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
     </div>
   </div>
 
-  <div class="win">
+  <div class="win full">
     <div class="win-bar"><span class="title" id="menuTitle">레벨 고르기</span><span class="dots"><i></i><i></i><i></i></span></div>
     <div class="win-body">
       <div class="menu" id="menu"></div>
@@ -393,6 +442,14 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
       </div>
       <p class="small muted" style="text-align:center;margin:12px 0 0">도장은 이 기기에만 저장돼요. <button class="btn" style="min-height:32px;padding:2px 10px;font-size:13px;box-shadow:none" id="resetStamps">도장 초기화</button>
       <button class="btn" style="min-height:32px;padding:2px 10px;font-size:13px;box-shadow:none" id="changeMode">모드 바꾸기</button></p>
+    </div>
+  </div>
+  <div class="win pc-only" id="qrWin">
+    <div class="win-bar"><span class="title">📱 내 폰으로 하기</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body qr-box">
+      <img src="assets/qr.svg" alt="사이트 QR 코드" width="200" height="200">
+      <div><p class="jua" style="font-size:22px;margin:0">카메라로 QR을 찍으면<br>내 폰에서도 할 수 있어요!</p>
+      <p class="muted" style="margin:6px 0 0;word-break:break-all">jyh0315.github.io/blood</p></div>
     </div>
   </div>
 </section>
@@ -443,7 +500,7 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
     </div>
   </div>
 
-  <div class="win">
+  <div class="win full">
     <div class="win-bar"><span class="title">한눈에 정리</span><span class="dots"><i></i><i></i><i></i></span></div>
     <div class="win-body">
       <div class="tbl-scroll">
@@ -465,7 +522,7 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
 <!-- ================= 2. EXPERIMENT ================= -->
 <section class="page" id="page-experiment">
   <div class="guide" data-guide="experiment"></div>
-  <div class="win">
+  <div class="win full">
     <div class="win-bar"><span class="title">가상 혈액형 판정 실험</span><span class="dots"><i></i><i></i><i></i></span></div>
     <div class="win-body">
       <div class="steps" id="expSteps"></div>
@@ -509,7 +566,7 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
     </div>
   </div>
 
-  <div class="win">
+  <div class="win full">
     <div class="win-bar"><span class="title">내 실험 결과 판정기</span><span class="dots"><i></i><i></i><i></i></span></div>
     <div class="win-body">
       <p style="margin-top:0">부스에서 직접 한 실험 결과를 입력해 보세요. 피가 <b>오돌토돌 덩어리지면</b> 응집, <b>고르게 퍼져 있으면</b> 응집 없음이에요.</p>
@@ -523,7 +580,7 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
 <!-- ================= 3. TRANSFUSION ================= -->
 <section class="page" id="page-transfusion">
   <div class="guide" data-guide="transfusion"></div>
-  <div class="win">
+  <div class="win full">
     <div class="win-bar"><span class="title">응급실 수혈 게임</span><span class="dots"><i></i><i></i><i></i></span></div>
     <div class="win-body">
       <p style="margin-top:0">환자에게 <b>줄 수 있는 혈액팩을 모두</b> 고른 뒤 수혈하기를 누르세요.
@@ -538,7 +595,7 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
       <div id="tfFeedback"></div>
     </div>
   </div>
-  <div class="win" id="tfSummary" hidden>
+  <div class="win full" id="tfSummary" hidden>
     <div class="win-bar"><span class="title">수혈 관계도</span><span class="dots"><i></i><i></i><i></i></span></div>
     <div class="win-body">
       <div class="flow">
@@ -597,14 +654,14 @@ footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40p
 <!-- ================= 5. QUIZ ================= -->
 <section class="page" id="page-quiz">
   <div class="guide" data-guide="quiz"></div>
-  <div class="win">
+  <div class="win full">
     <div class="win-bar"><span class="title">QUIZ TIME</span><span class="dots"><i></i><i></i><i></i></span></div>
     <div class="win-body" id="quizBody"></div>
   </div>
 </section>
 
 </main>
-<footer>경북과학고등학교 · 창의과학한마당 ABO 혈액형 부스</footer>
+<footer>혈액형 판별 실험을 통해 알아보는 나의 ABO 혈액형 · 경북과학고등학교 창의과학한마당</footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="ov" id="ov" role="dialog" aria-modal="true" aria-label="레벨 클리어">
   <canvas id="confetti"></canvas>
@@ -706,6 +763,21 @@ const sfx = {
 function renderMute() { $('#muteBtn').textContent = muted ? '🔇' : '🔊'; }
 $('#muteBtn').addEventListener('click', () => { muted = !muted; store.set('abo-muted', muted); renderMute(); if (!muted) sfx.tap(); });
 
+/* ---------- PC / phone view ---------- */
+let viewPref = store.get('abo-view', 'auto');
+function applyView() {
+  const v = viewPref === 'auto' ? (innerWidth >= 900 ? 'pc' : 'phone') : viewPref;
+  document.body.dataset.view = v;
+  $('#viewBtn').innerHTML = v === 'pc' ? '📱<span class="vb-t"> 폰 화면</span>' : '💻<span class="vb-t"> PC 화면</span>';
+  $('#viewBtn').title = v === 'pc' ? '폰 화면으로 바꾸기' : 'PC 화면으로 바꾸기';
+}
+$('#viewBtn').addEventListener('click', () => {
+  viewPref = document.body.dataset.view === 'pc' ? 'phone' : 'pc';
+  store.set('abo-view', viewPref); applyView(); sfx.tap();
+});
+window.addEventListener('resize', () => { if (viewPref === 'auto') applyView(); });
+applyView();
+
 /* ---------- modes & levels ---------- */
 const MISSION_INFO = {
   principle:   { name: '혈액형의 원리', short: '원리', desc: '항체를 끌어다 적혈구의 항원에 붙이는 짝 맞추기 게임!' },
@@ -741,7 +813,8 @@ function buildModeUI() {
   if (!mode) return;
   const L = levels();
   $('#tabs').innerHTML = `<a href="#home">홈</a>` + L.map((k, i) => `<a href="#${k}">LV${i + 1} ${MISSION_INFO[k].short}</a>`).join('');
-  $('#modeChip').textContent = MODES[mode].name + ' 모드';
+  $('#modeChip').textContent = '🎒 ' + MODES[mode].name;
+  $('#modeChip').hidden = false;
   $('#menuTitle').textContent = `${MODES[mode].name} · LEVEL 1~${L.length}`;
   $('#heroGoal').innerHTML = `<b>LEVEL ${L.length}</b>까지 모두 깨면 <b>도장 ${L.length}개</b>가 모여요!`;
   $('#menu').innerHTML = L.map((k, i) => `<a href="#${k}" data-key="${k}"><span class="num">LEVEL ${i + 1}</span><h3>${MISSION_INFO[k].name}</h3><p>${MISSION_INFO[k].desc}</p><svg class="got" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" fill="#fff" stroke="#A23E55" stroke-width="3"/><path d="M12 20l6 6 11-12" stroke="#A23E55" stroke-width="4" fill="none" stroke-linecap="round"/></svg></a>`).join('');
@@ -836,7 +909,7 @@ function route() {
     if (a.getAttribute('href') === '#' + page) a.setAttribute('aria-current', 'page');
     else a.removeAttribute('aria-current');
   });
-  document.querySelector('header.top').hidden = page === 'start';
+
   window.scrollTo(0, 0);
   expRunning = page === 'experiment';
   if (expRunning) loop();

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>QR 포스터 · 혈액형 판별 실험을 통해 알아보는 나의 ABO 혈액형</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6CBD0;--panel:#FFF8F3;--ink:#3B2A2F;--ink-2:#7A4E58;--accent:#A23E55;--soft:#EBB2BA}
+@page{size:A4;margin:0}
+*{box-sizing:border-box}
+html,body{margin:0;background:#ddd;color:var(--ink);font-family:"Gowun Dodum",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.sheet{
+  width:210mm;height:297mm;margin:0 auto;background:var(--bg);padding:14mm;position:relative;overflow:hidden;
+  background-image:radial-gradient(#FADDE1 1.6px,transparent 1.6px);background-size:7mm 7mm;
+}
+.win{background:var(--panel);border:3px solid var(--ink);border-radius:9mm;box-shadow:2.2mm 2.2mm 0 var(--ink);height:100%;display:flex;flex-direction:column;overflow:hidden}
+.bar{display:flex;align-items:center;padding:4mm 6mm;background:var(--soft);border-bottom:3px solid var(--ink)}
+.bar .t{font-family:"Jua";font-size:6mm;background:#FFFDFB;border:2.5px solid var(--ink);border-radius:99px;padding:0 5mm}
+.bar .dots{margin-left:auto;display:flex;gap:2mm}.bar .dots i{width:3.5mm;height:3.5mm;border-radius:50%;background:var(--ink)}
+.body{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:8mm 10mm}
+.school{font-family:"Jua";font-size:5.5mm;border:2.5px solid var(--ink);border-radius:99px;padding:0 5mm;background:#FFFDFB}
+h1{font-family:"Jua";font-weight:400;font-size:11.5mm;line-height:1.25;margin:5mm 0 2mm;word-break:keep-all}
+h1 small{display:block;font-size:7.5mm;color:var(--ink-2)}
+.qr{position:relative;margin:4mm 0 3mm}
+.qr img.code{width:92mm;height:92mm;background:#fff;border:3px solid var(--ink);border-radius:6mm;padding:4mm;display:block}
+.qr .duck{position:absolute;width:44mm;left:-40mm;bottom:-6mm}
+.qr .tower{position:absolute;width:44mm;right:-40mm;bottom:-6mm}
+.cta{font-family:"Jua";font-size:9mm;margin:4mm 0 1mm;color:var(--accent)}
+.url{font-size:5.5mm;color:var(--ink-2);margin:0}
+.levels{display:flex;gap:5mm;margin-top:7mm}
+.lv{border:2.5px solid var(--ink);border-radius:5mm;background:#FFFDFB;padding:3mm 6mm;font-size:4.6mm;box-shadow:1.2mm 1.2mm 0 var(--ink)}
+.lv b{font-family:"Jua";font-weight:400;font-size:6.5mm;display:block}
+.lv .tag{display:inline-block;font-family:"Jua";font-size:4.2mm;color:#fff;border-radius:99px;padding:0 3mm}
+.toolbar{text-align:center;padding:12px}
+.toolbar button{font-family:"Jua";font-size:18px;padding:8px 18px;border:2px solid var(--ink);border-radius:12px;background:#fff;cursor:pointer}
+@media print{.toolbar{display:none}html,body{background:none}}
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="print()">🖨️ 인쇄하기 (A4)</button></div>
+<div class="sheet">
+  <div class="win">
+    <div class="bar"><span class="t">창의과학한마당</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="body">
+      <span class="school">경북과학고등학교</span>
+      <h1><small>혈액형 판별 실험을 통해 알아보는</small>나의 ABO 혈액형</h1>
+      <div class="qr">
+        <img class="duck" src="assets/duck_wave.png" alt="">
+        <img class="code" src="assets/qr.svg" alt="사이트 QR 코드">
+        <img class="tower" src="assets/tower_thumb.png" alt="">
+      </div>
+      <p class="cta">📱 QR을 찍고 게임으로 혈액형 탐험!</p>
+      <p class="url">jyh0315.github.io/blood</p>
+      <div class="levels">
+        <div class="lv"><span class="tag" style="background:#5B9BE0">LEVEL 1~3</span><b>저학년</b>원리 · 가상 실험 · OX 퀴즈</div>
+        <div class="lv"><span class="tag" style="background:#A23E55">LEVEL 1~5</span><b>고학년</b>+ 수혈 게임 · 유전 퍼즐</div>
+      </div>
+      <p style="margin-top:auto;font-family:'Jua';font-size:5.5mm">레벨을 모두 깨고 도장을 모으면 부스에서 확인해 드려요! 🎉</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
