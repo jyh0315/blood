@@ -442,6 +442,8 @@ body[data-view="phone"] .qr-box{flex-direction:column;text-align:center}
       </div>
       <p class="small muted" style="text-align:center;margin:12px 0 0">도장은 이 기기에만 저장돼요. <button class="btn" style="min-height:32px;padding:2px 10px;font-size:13px;box-shadow:none" id="resetStamps">도장 초기화</button>
       <button class="btn" style="min-height:32px;padding:2px 10px;font-size:13px;box-shadow:none" id="changeMode">모드 바꾸기</button></p>
+      <div style="text-align:center;margin-top:14px"><button class="btn reset-all">🗑️ 전체 기록 초기화</button>
+      <p class="small muted" style="margin:6px 0 0">저학년·고학년 도장과 모든 게임 진행 기록을 지우고 처음 화면으로 돌아가요. (다음 관람객용)</p></div>
     </div>
   </div>
   <div class="win pc-only" id="qrWin">
@@ -661,7 +663,8 @@ body[data-view="phone"] .qr-box{flex-direction:column;text-align:center}
 </section>
 
 </main>
-<footer>혈액형 판별 실험을 통해 알아보는 나의 ABO 혈액형 · 경북과학고등학교 창의과학한마당</footer>
+<footer>혈액형 판별 실험을 통해 알아보는 나의 ABO 혈액형 · 경북과학고등학교 창의과학한마당
+  <div style="margin-top:10px"><button class="btn reset-all" style="min-height:34px;padding:4px 12px;font-size:14px">🗑️ 전체 기록 초기화</button></div></footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="ov" id="ov" role="dialog" aria-modal="true" aria-label="레벨 클리어">
   <canvas id="confetti"></canvas>
@@ -849,6 +852,15 @@ $('#resetStamps').addEventListener('click', () => {
 });
 function goStart() { location.hash = '#start'; }
 $('#changeMode').addEventListener('click', goStart);
+// wipe every record (both modes' stamps, chosen mode, in-page progress) for the next visitor;
+// sound and PC/phone view preferences are kept since those are booth settings
+function resetAll() {
+  if (!confirm('모든 기록(저학년·고학년 도장, 게임 진행)을 지우고 처음부터 시작할까요?')) return;
+  ['abo-mode', 'abo-stamps-junior', 'abo-stamps-senior', 'abo-stamps'].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+  location.hash = '#start';
+  location.reload();
+}
+$$('.reset-all').forEach(b => b.addEventListener('click', resetAll));
 $('#modeChip').addEventListener('click', goStart);
 $$('.mode-card').forEach(b => b.addEventListener('click', () => {
   sfx.ok(); setMode(b.dataset.mode); location.hash = '#home';
