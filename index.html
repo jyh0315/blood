@@ -266,7 +266,7 @@ table.tbl{width:100%;border-collapse:collapse;background:#fff;border:2px solid v
 .start-chars img:first-child{animation:bob 2.4s ease-in-out infinite}
 .start-chars img:last-child{animation:bob 2.4s ease-in-out .6s infinite}
 @keyframes bob{50%{transform:translateY(-8px)}}
-.modes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:14px}
 @media (max-width:620px){.modes{grid-template-columns:1fr}}
 .mode-card{
   text-align:left;border:3px solid var(--line);border-radius:20px;padding:16px;background:var(--panel-2);
@@ -278,6 +278,9 @@ table.tbl{width:100%;border-collapse:collapse;background:#fff;border:2px solid v
 .mode-card .lv{font-family:"Jua";font-size:16px;display:inline-block;border-radius:999px;padding:0 10px;color:#fff;margin-bottom:4px}
 .mode-card.jr .lv{background:#5B9BE0}
 .mode-card.sr .lv{background:var(--accent)}
+.mode-card.gf{background:#2F2226;color:#FFF8F3}
+.mode-card.gf .lv{background:#E3242B}
+.mode-card.gf p{color:#EBB2BA}
 .mode-card p{margin:4px 0 0;font-size:14px;color:var(--ink-2)}
 .mode-chip{flex:none;font-family:"Jua";font-size:14px;border:2px solid var(--line);border-radius:999px;padding:3px 10px;background:#fff}
 .icon-btn{flex:none;width:38px;height:38px;border:2px solid var(--line);border-radius:50%;background:var(--panel);font-size:18px;display:grid;place-items:center;padding:0}
@@ -322,6 +325,28 @@ table.tbl{width:100%;border-collapse:collapse;background:#fff;border:2px solid v
 body[data-mode="senior"] .jr-only{display:none}
 .shake{animation:shake .45s .5s}
 @keyframes shake{20%{transform:translate(-8px,4px)}40%{transform:translate(7px,-5px)}60%{transform:translate(-5px,3px)}80%{transform:translate(3px,-2px)}}
+
+/* ---------- gifted mode ---------- */
+.note{font-size:15px;line-height:1.7}
+.note ol,.note ul{padding-left:20px;margin:6px 0}
+.note li{margin:4px 0}
+.note li > ul,.note li > ol{margin:2px 0}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em;background:#F4E9EB;border-radius:4px;padding:1px 4px;word-break:break-all}
+.formula{font-family:"Times New Roman",serif;font-size:17px;text-align:center;background:#fff;border:2px solid var(--line);border-radius:12px;padding:8px 10px;margin:8px 0}
+.sim-svg{width:100%;max-width:520px;height:auto;display:block;margin:10px auto 0;border:2px solid var(--line);border-radius:14px;background:#fff}
+.sim-svg .pop{animation:pop .45s cubic-bezier(.3,1.6,.5,1);transform-box:fill-box;transform-origin:center}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.geno-card,.cond{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
+.slider{display:grid;grid-template-columns:110px 1fr;align-items:center;gap:10px;margin:6px 0}
+.slider label{font-family:"Jua"}
+.slider input{width:100%;accent-color:var(--accent);height:28px}
+.bar.pg .track{position:relative;overflow:visible}
+.bar.pg .fill{border-radius:999px}
+.bar.pg .tgt{position:absolute;top:-5px;bottom:-5px;width:3px;background:var(--ink);border-radius:2px}
+.calc-q input{width:110px;font:inherit;font-size:18px;padding:8px 10px;border:2px solid var(--line);border-radius:10px}
+.typing td{font-family:"Jua";font-size:18px}
+.typing td.g0{background:#fff}.typing td.g1{background:#FBE0DC}.typing td.g3{background:#F2A7A0}.typing td.g4{background:#E26D63;color:#fff}
+.units{grid-template-columns:repeat(4,1fr)}
 
 footer{text-align:center;color:var(--ink-2);font-size:14px;padding:20px 16px 40px}
 /* ---------- PC view (booth monitor / laptop) ---------- */
@@ -401,6 +426,10 @@ body[data-view="phone"] .qr-box{flex-direction:column;text-align:center}
           <img src="assets/tower_write.png" alt="">
           <div><span class="lv">LEVEL 1 ~ 5</span><h2>고학년</h2><p>원리 → 가상 실험 → 수혈 → 유전 → OX 퀴즈까지 도전!</p></div>
         </button>
+        <button class="mode-card gf" data-mode="gifted">
+          <img src="assets/duck_stand.png" alt="">
+          <div><span class="lv">LEVEL 1~5 · 학부 수준</span><h2>과고생</h2><p>당전이효소, IgM/IgG 물리학, 집단유전학, 검사 판독, 혈액은행</p></div>
+        </button>
       </div>
     </div>
   </div>
@@ -443,7 +472,7 @@ body[data-view="phone"] .qr-box{flex-direction:column;text-align:center}
       <p class="small muted" style="text-align:center;margin:12px 0 0">도장은 이 기기에만 저장돼요. <button class="btn" style="min-height:32px;padding:2px 10px;font-size:13px;box-shadow:none" id="resetStamps">도장 초기화</button>
       <button class="btn" style="min-height:32px;padding:2px 10px;font-size:13px;box-shadow:none" id="changeMode">모드 바꾸기</button></p>
       <div style="text-align:center;margin-top:14px"><button class="btn reset-all">🗑️ 전체 기록 초기화</button>
-      <p class="small muted" style="margin:6px 0 0">저학년·고학년 도장과 모든 게임 진행 기록을 지우고 처음 화면으로 돌아가요. (다음 관람객용)</p></div>
+      <p class="small muted" style="margin:6px 0 0">모든 모드의 도장과 게임 진행 기록을 지우고 처음 화면으로 돌아가요. (다음 관람객용)</p></div>
     </div>
   </div>
   <div class="win pc-only" id="qrWin">
@@ -662,6 +691,188 @@ body[data-view="phone"] .qr-box{flex-direction:column;text-align:center}
   </div>
 </section>
 
+<!-- ================= GIFTED 1. MOLECULE ================= -->
+<section class="page" id="page-molecule">
+  <div class="guide" data-guide="molecule"></div>
+  <div class="win">
+    <div class="win-bar"><span class="title">개념 노트 · ABO 항원의 분자 실체</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body note">
+      <p>ABO 항원은 단백질이 아니라 <b>당 사슬의 말단 구조</b>예요. 적혈구 막 당지질·당단백의 <b>type 2 전구체 사슬</b> <code>Galβ1-4GlcNAcβ1-R</code> 위에 효소들이 순서대로 당을 붙여 만들어요.</p>
+      <ol>
+        <li><b>FUT1</b>(H 유전자, 19번 염색체)이 만드는 α1,2-푸코스전이효소가 <code>Fucα1-2Galβ-R</code>을 만들어요. 이게 <mark>H 항원</mark>이에요. 분비액 쪽은 <b>FUT2</b>(Se)가 담당하고, 이 차이로 분비형과 비분비형이 갈려요.</li>
+        <li><b>ABO 유전자</b>(9q34.2, 엑손 7개, 촉매 도메인은 주로 엑손 6–7)는 GT6 계열 당전이효소를 만들어요.
+          <ul>
+            <li><b>GTA</b>: UDP-GalNAc를 공여체로 써서 <code>GalNAcα1-3(Fucα1-2)Galβ-R</code>, 즉 <mark>A 항원</mark>을 만들어요.</li>
+            <li><b>GTB</b>: UDP-Gal을 공여체로 써서 <code>Galα1-3(Fucα1-2)Galβ-R</code>, 즉 <mark>B 항원</mark>을 만들어요.</li>
+          </ul>
+        </li>
+        <li>GTA와 GTB는 아미노산 354개 중 <b>단 4개</b>만 달라요: <code>R176G · G235S · L266M · G268A</code>. 그중 <b>266번과 268번</b> 잔기가 공여체 결합 포켓의 크기를 정해요. 그래서 GalNAc의 N-아세틸기가 들어갈 수 있는지가 갈려요.</li>
+        <li><b>O01 대립유전자</b>는 엑손 6의 <code>c.261delG</code> 때문에 틀이동이 일어나요. 그 결과 단백질이 일찍 끝나서 효소 활성이 없어요. H 항원이 그대로 남기 때문에 H 항원 양은 <b>O &gt; A2 &gt; B &gt; A2B &gt; A1 &gt; A1B</b> 순서예요.</li>
+        <li><b>봄베이 표현형(O<sub>h</sub>, hh)</b>: FUT1 두 개가 모두 기능을 잃은 경우예요. H 항원이 없으니 A/B 유전자가 있어도 A/B 항원을 만들 수 없어요. 혈장에는 <b>항A·항B·항H</b>가 있어서 봄베이 혈액만 수혈받을 수 있어요. 1952년 인도 봄베이에서 처음 보고됐어요.</li>
+        <li><b>cis-AB</b>: 한 대립유전자가 GTA와 GTB 활성을 모두 가진 키메라 효소를 만들어요. 그래서 AB × O 부모에서도 AB 자녀가 나올 수 있어요. 한국과 일본에서 상대적으로 많이 보고돼요.</li>
+      </ol>
+      <div class="legend" style="margin-top:4px">
+        <span><svg viewBox="0 0 26 26"><rect x="4" y="4" width="18" height="18" fill="#2E6FD8" stroke="#3B2A2F" stroke-width="2"/></svg>GlcNAc</span>
+        <span><svg viewBox="0 0 26 26"><circle cx="13" cy="13" r="9" fill="#FFD400" stroke="#3B2A2F" stroke-width="2"/></svg>Gal</span>
+        <span><svg viewBox="0 0 26 26"><rect x="4" y="4" width="18" height="18" fill="#FFD400" stroke="#3B2A2F" stroke-width="2"/></svg>GalNAc</span>
+        <span><svg viewBox="0 0 26 26"><path d="M13 3L23 21H3z" fill="#E3242B" stroke="#3B2A2F" stroke-width="2"/></svg>Fuc</span>
+        <span class="small muted">(SNFG 표준 당 기호)</span>
+      </div>
+    </div>
+  </div>
+  <div class="win">
+    <div class="win-bar"><span class="title">당 사슬 합성 시뮬레이터</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body">
+      <p style="margin-top:0">주어진 유전자형에서 <b>실제로 작용하는 효소만, 올바른 순서로</b> 눌러 적혈구 표면 당 사슬을 완성하세요. 그다음 표현형을 판정하면 돼요.</p>
+      <div class="score" id="moScore"></div>
+      <div class="geno-card" id="moGeno"></div>
+      <svg id="moSvg" class="sim-svg" viewBox="0 0 340 230" role="img" aria-label="당 사슬"></svg>
+      <div class="btn-row" id="moEnz" style="margin-top:12px"></div>
+      <div id="moAsk" hidden><p class="jua" style="margin:14px 0 6px">이 사람의 적혈구 표현형은?</p><div class="btn-row" id="moPheno"></div></div>
+      <div id="moMsg"></div>
+      <div class="btn-row" style="margin-top:12px"><button class="btn primary" id="moNext" hidden>다음 ▶</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GIFTED 2. ANTIBODY PHYSICS ================= -->
+<section class="page" id="page-antibody">
+  <div class="guide" data-guide="antibody"></div>
+  <div class="win">
+    <div class="win-bar"><span class="title">개념 노트 · IgM vs IgG와 제타 전위</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body note">
+      <ul>
+        <li><b>자연 동종응집소</b>: 항A·항B는 수혈이나 임신 같은 노출 없이 생후 3–6개월부터 만들어져요. 장내 세균 등이 가진 A/B 유사 당 구조에 대한 교차반응 때문이고, 대부분 <b>IgM</b>이에요. 다만 O형은 IgG 항A·항B 비율이 높아서 ABO 신생아 용혈성 질환이 주로 O형 산모에서 생겨요.</li>
+        <li><b>IgM</b>: J사슬로 묶인 오량체(~970 kDa)이고 항원결합부위가 10개예요. 약 30 nm까지 뻗을 수 있어서 식염수에서도 <b>직접 응집</b>시켜요. 분자 하나만으로 C1q를 활성화해서 고전경로 보체가 작동하고, MAC가 만들어져 <b>혈관 안에서 용혈</b>이 일어나요. 이것이 ABO 부적합 수혈 때의 급성 용혈성 수혈 반응이에요(혈색소뇨, DIC, 급성 신손상).</li>
+        <li><b>IgG</b>: 단량체(~150 kDa)이고 두 Fab 사이 거리가 약 13 nm예요. FcRn을 통해 <b>태반을 통과</b>해요. 그래서 신생아 용혈성 질환(HDFN, 대표적으로 항D)의 원인이 돼요.</li>
+        <li><b>제타 전위</b>: 적혈구 막 글리코포린의 <b>시알산(음전하)</b> 주위로 양이온 구름이 생겨요. 그래서 세포들이 서로 약 25 nm 이상 떨어져 있어요. IgG는 이 거리를 잇지 못하고 세포에 붙기만 하는데, 이를 <b>감작</b>이라고 하고 이런 IgG를 불완전 항체라고 불러요.</li>
+        <li><b>극복 전략</b>
+          <ol>
+            <li><b>효소</b>(파파인, 피신)로 시알산이 많은 당단백을 잘라내면 세포 사이 거리가 줄어들어요.</li>
+            <li><b>항인간글로불린</b>(AHG, 쿰스 시약)이 서로 다른 세포에 붙은 IgG의 Fc를 이어 줘요.
+              <ul>
+                <li><b>DAT</b>(직접 쿰스): 몸 안에서 이미 감작된 적혈구를 확인해요(HDFN, 자가면역 용혈).</li>
+                <li><b>IAT</b>(간접 쿰스): 혈청 속 항체를 찾아내요(항체 선별, 교차시험).</li>
+              </ul>
+            </li>
+          </ol>
+        </li>
+      </ul>
+      <p class="small muted" style="margin:0">※ 여기 나온 거리 수치(nm)는 개념을 설명하려고 쓴 모식적인 근사값이에요.</p>
+    </div>
+  </div>
+  <div class="win">
+    <div class="win-bar"><span class="title">응집 예측 챌린지</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body">
+      <p style="margin-top:0">항체 종류, 적혈구 항원, 반응 조건을 보고 <b>응집이 일어날지</b> 예측하세요. 6문제 중 5문제 이상 맞히면 통과예요.</p>
+      <div class="score" id="abScore"></div>
+      <div class="cond" id="abCond"></div>
+      <svg id="abSvg" class="sim-svg" viewBox="0 0 340 210" role="img" aria-label="세포 간 거리와 항체"></svg>
+      <div class="btn-row" id="abPick" style="margin-top:12px;justify-content:center">
+        <button class="btn" data-v="1">응집 ○ 예측</button><button class="btn" data-v="0">응집 × 예측</button>
+      </div>
+      <div id="abMsg"></div>
+      <div class="btn-row" style="margin-top:12px"><button class="btn primary" id="abNext" hidden>다음 ▶</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GIFTED 3. POPULATION GENETICS ================= -->
+<section class="page" id="page-popgen">
+  <div class="guide" data-guide="popgen"></div>
+  <div class="win">
+    <div class="win-bar"><span class="title">개념 노트 · 3대립유전자 하디-바인베르크</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body note">
+      <p>대립유전자 빈도를 A = <i>p</i>, B = <i>q</i>, O = <i>r</i> (<i>p</i>+<i>q</i>+<i>r</i> = 1)라고 해요. 무작위 교배 평형(HWE)을 가정하면 표현형 빈도는 다음과 같아요.</p>
+      <div class="formula">A = <i>p</i>² + 2<i>pr</i> &nbsp;·&nbsp; B = <i>q</i>² + 2<i>qr</i> &nbsp;·&nbsp; AB = 2<i>pq</i> &nbsp;·&nbsp; O = <i>r</i>²</div>
+      <p><b>Bernstein(1924) 추정</b>: A + O = <i>p</i>² + 2<i>pr</i> + <i>r</i>² = (<i>p</i>+<i>r</i>)² = (1−<i>q</i>)² 이에요. 그래서 아래처럼 구할 수 있어요.</p>
+      <div class="formula"><i>r</i> = √O &nbsp;·&nbsp; <i>q</i> = 1 − √(A+O) &nbsp;·&nbsp; <i>p</i> = 1 − √(B+O)</div>
+      <p>Bernstein은 이 <b>단일 유전자좌·3대립유전자 모델</b>이 실제 집단 자료와 맞는다는 것을 보였어요. 그래서 "두 유전자좌" 가설은 기각됐어요.</p>
+      <p><b>베이즈 추론</b>: 표현형이 A인 사람이 AO일 확률은 다음과 같아요.</p>
+      <div class="formula">P(AO | A) = 2<i>pr</i> / (<i>p</i>² + 2<i>pr</i>)</div>
+      <p>이 사람이 자녀에게 O를 물려줄 확률은 P(AO | A) × ½ 이에요.</p>
+      <p class="small muted" style="margin:0">한국인 분포는 대략 A 34% · B 27% · O 28% · AB 11%예요(조사에 따라 ±1~2%p 차이가 있어요). 아래 게임은 이 값을 목표로 써요.</p>
+    </div>
+  </div>
+  <div class="win">
+    <div class="win-bar"><span class="title">집단유전학 랩</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body">
+      <p class="jua" style="margin:0 0 4px">① 슬라이더로 <i>p</i>, <i>q</i>를 조절해 한국인 분포를 재현하세요 (모든 항목 오차 ≤ 1.0%p)</p>
+      <div class="slider"><label>p (A) <b id="pgPv"></b></label><input type="range" id="pgP" min="0" max="1" step="0.005" value="0.4"></div>
+      <div class="slider"><label>q (B) <b id="pgQv"></b></label><input type="range" id="pgQ" min="0" max="1" step="0.005" value="0.1"></div>
+      <div class="small" id="pgR"></div>
+      <div class="bars" id="pgBars"></div>
+      <div id="pgFit"></div>
+      <p class="jua" style="margin:18px 0 4px">② 계산 문제 (Bernstein 추정값 기준, ±1.0%p 허용)</p>
+      <div class="calc" id="pgQs"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GIFTED 4. TYPING DISCREPANCY ================= -->
+<section class="page" id="page-typing">
+  <div class="guide" data-guide="typing"></div>
+  <div class="win">
+    <div class="win-bar"><span class="title">개념 노트 · 정검사와 역검사</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body note">
+      <ul>
+        <li><b>정검사</b>(세포형): 환자 적혈구에 항A, 항B, 항D 시약을 넣어 봐요. → 적혈구에 어떤 <b>항원</b>이 있는지 알 수 있어요.</li>
+        <li><b>역검사</b>(혈청형): 환자 혈청에 A1, B 시약 적혈구를 넣어 봐요(필요하면 O 세포와 자가 대조도). → 혈청에 어떤 <b>항체</b>가 있는지 알 수 있어요.</li>
+        <li>정상이라면 두 결과가 서로 <b>거울상</b>이에요(예: A형은 정검사 항A만 +, 역검사 B 세포만 +). 응집 강도는 0부터 4+까지예요.</li>
+        <li><b>불일치의 원인</b>
+          <ol>
+            <li><b>항체가 약하거나 없음</b>: 생후 4–6개월 미만 신생아, 노인, 저감마글로불린혈증</li>
+            <li><b>항원이 약하거나 없음</b>: Ax 같은 약한 아형, 백혈병 등</li>
+            <li><b>예상하지 못한 항체</b>: <b>항A1</b>은 A2형의 1–8%, A2B형의 22–35%에서 나와요.</li>
+            <li><b>봄베이</b>: 항H 때문에 <b>O 세포까지 응집</b>돼요.</li>
+            <li><b>연전 형성</b>(rouleaux): 다발성 골수종 등에서 생겨 응집처럼 보일 수 있어요.</li>
+          </ol>
+        </li>
+        <li>불일치가 해결되기 전에는 혈액형을 확정할 수 없어요. 응급 상황이면 O형 적혈구를 써요.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="win">
+    <div class="win-bar"><span class="title">검사실 판독 챌린지</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body">
+      <p style="margin-top:0">검사 결과표를 보고 가장 알맞은 해석을 고르세요. 6문제 중 5문제 이상 맞히면 통과예요.</p>
+      <div class="score" id="tyScore"></div>
+      <div id="tyCase"></div>
+      <div class="btn-row" id="tyOpts" style="margin-top:12px"></div>
+      <div id="tyMsg"></div>
+      <div class="btn-row" style="margin-top:12px"><button class="btn primary" id="tyNext" hidden>다음 ▶</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GIFTED 5. BLOOD BANK ================= -->
+<section class="page" id="page-bank">
+  <div class="guide" data-guide="bank"></div>
+  <div class="win">
+    <div class="win-bar"><span class="title">개념 노트 · 혈액 제제와 RhD</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body note">
+      <ul>
+        <li><b>적혈구(RBC) 제제</b>: 문제는 환자 혈장의 항체가 공여 적혈구의 항원을 만나는 거예요. 그래서 <mark>공여 RBC 항원 ⊆ 환자 항원</mark>이어야 해요.</li>
+        <li><b>신선동결혈장(FFP)</b>: 방향이 <b>반대</b>예요. 공여 혈장의 항체가 환자 적혈구의 항원을 만나는 게 문제예요. 그래서 <mark>AB형 혈장이 만능 공여 혈장</mark>이고, O형 혈장은 O형 환자에게만 줄 수 있어요.</li>
+        <li><b>RhD</b>: 항D는 자연항체가 아니에요. RhD 음성인 사람(한국인 약 0.1–0.2%)이 RhD 양성 적혈구에 노출되면 감작돼요. 그래서 RhD 음성 환자, 특히 <b>가임기 여성</b>에게는 RhD 음성 RBC를 줘요. 혈장 제제에서는 RhD를 보통 고려하지 않아요.</li>
+        <li><b>RhIG</b>: RhD 음성 산모가 RhD 양성 아기를 낳으면 72시간 안에 항D 면역글로불린을 맞아요. 태아 RhD 양성 세포를 제거해서 감작을 막는 거예요.</li>
+        <li><b>혈액형을 모르는 응급 상황</b>: 적혈구는 <b>O형 RhD 음성</b>을 써요. 남성이나 가임기가 아닌 여성은 O형 RhD 양성을 쓰기도 해요. 혈장은 <b>AB형</b>을 써요. 이후 혈액형이 확인되고 교차시험을 거치면 같은 형으로 바꿔요.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="win">
+    <div class="win-bar"><span class="title">혈액은행 출고 시뮬레이터</span><span class="dots"><i></i><i></i><i></i></span></div>
+    <div class="win-body">
+      <p style="margin-top:0">요청서를 보고 <b>출고할 수 있는 제제를 모두</b> 고르세요. 6건 중 5건 이상 완벽하게 맞히면 통과예요.</p>
+      <div class="score" id="bkScore"></div>
+      <div class="patient" id="bkReq"></div>
+      <div class="bags units" id="bkUnits"></div>
+      <div class="btn-row" style="margin-top:14px"><button class="btn primary" id="bkSubmit">📦 출고</button><button class="btn primary" id="bkNext" hidden>다음 요청 ▶</button></div>
+      <div id="bkMsg"></div>
+    </div>
+  </div>
+</section>
+
 </main>
 <footer>혈액형 판별 실험을 통해 알아보는 나의 ABO 혈액형 · 경북과학고등학교 창의과학한마당
   <div style="margin-top:10px"><button class="btn reset-all" style="min-height:34px;padding:4px 12px;font-size:14px">🗑️ 전체 기록 초기화</button></div></footer>
@@ -788,10 +999,16 @@ const MISSION_INFO = {
   transfusion: { name: '응급실 수혈 게임', short: '수혈 게임', desc: '환자에게 줄 수 있는 혈액팩을 모두 골라 생명을 구해요.' },
   genetics:    { name: '혈액형 유전 퍼즐', short: '유전 퍼즐', desc: '대립유전자로 가족의 혈액형 수수께끼를 풀어요.' },
   quiz:        { name: '깜짝 OX 퀴즈', short: 'OX 퀴즈', desc: '배운 내용을 OX 퀴즈로 확인해요.' },
+  molecule:    { name: 'ABO 항원의 분자 실체', short: '분자', desc: 'FUT1·GTA·GTB로 H/A/B 당 사슬을 직접 합성하고 봄베이까지 판정!' },
+  antibody:    { name: 'IgM vs IgG 응집 물리학', short: '항체', desc: '제타 전위, 효소 처리, 쿰스 시약 — 응집 여부를 예측하라.' },
+  popgen:      { name: 'ABO 집단유전학', short: '집단유전', desc: '3대립유전자 HWE, Bernstein 추정, 베이즈 확률 계산.' },
+  typing:      { name: '정·역 혈액형 검사 판독', short: '검사 판독', desc: '신생아, A2 아형, 봄베이 — 검사 불일치를 해석하라.' },
+  bank:        { name: '혈액은행 출고 시뮬레이터', short: '혈액은행', desc: 'RBC·FFP 방향성과 RhD까지 고려해 혈액을 출고하라.' },
 };
 const MODES = {
   junior: { name: '저학년', levels: ['principle', 'experiment', 'quiz'] },
   senior: { name: '고학년', levels: ['principle', 'experiment', 'transfusion', 'genetics', 'quiz'] },
+  gifted: { name: '과고생', levels: ['molecule', 'antibody', 'popgen', 'typing', 'bank'] },
 };
 // what the characters say on each page, per mode
 const GUIDES = {
@@ -799,6 +1016,11 @@ const GUIDES = {
   experiment:  { img: 'tower_write', junior: '부스에서 하는 실험을 미리 연습해 보자! 순서대로 눌러 봐~', senior: 'PPT의 STEP 1~5 순서 그대로! 응집 결과를 보고 혈액형을 판정해 봐.' },
   transfusion: { img: 'duck_stand', junior: '환자를 구해 줘!', senior: '응급실이야! 받는 사람의 응집소와 주는 피의 응집원이 만나면 큰일 나. 신중하게!' },
   genetics:    { img: 'tower_thumb', junior: '', senior: 'A=B>O! 엄마 아빠에게 하나씩 받은 대립유전자로 가족 퍼즐을 풀어 봐.' },
+  molecule:    { img: 'tower_write', gifted: '혈액형 항원의 정체는 당 사슬! 효소 4개 아미노산 차이가 A와 B를 가른다고? 직접 합성해 봐.' },
+  antibody:    { img: 'duck_read', gifted: '왜 항D(IgG)는 식염수에서 응집을 못 시킬까? 제타 전위와 항체 길이로 예측해 봐!' },
+  popgen:      { img: 'tower_thumb', gifted: '하디-바인베르크로 한국인 혈액형 분포를 재현하고, 베이즈로 자녀 혈액형 확률을 계산해 봐.' },
+  typing:      { img: 'duck_stand', gifted: '진단검사의학과 판독실에 온 걸 환영해! 정검사와 역검사가 안 맞으면 이유가 있어.' },
+  bank:        { img: 'duck_cheer', gifted: '혈액은행 마지막 관문! 적혈구와 혈장은 호환 방향이 반대라는 거 잊지 마.' },
   quiz:        { img: 'duck_pray', junior: '쉬운 OX 퀴즈야! 4문제 이상 맞히면 도장 꽝!', senior: '기다리는 동안 깜짝 퀴즈! 6문제 이상 맞히면 도장 꽝!' },
 };
 let mode = store.get('abo-mode', null);
@@ -855,8 +1077,8 @@ $('#changeMode').addEventListener('click', goStart);
 // wipe every record (both modes' stamps, chosen mode, in-page progress) for the next visitor;
 // sound and PC/phone view preferences are kept since those are booth settings
 function resetAll() {
-  if (!confirm('모든 기록(저학년·고학년 도장, 게임 진행)을 지우고 처음부터 시작할까요?')) return;
-  ['abo-mode', 'abo-stamps-junior', 'abo-stamps-senior', 'abo-stamps'].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+  if (!confirm('모든 기록(모든 모드의 도장, 게임 진행)을 지우고 처음부터 시작할까요?')) return;
+  ['abo-mode', 'abo-stamps-junior', 'abo-stamps-senior', 'abo-stamps-gifted', 'abo-stamps'].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
   location.hash = '#start';
   location.reload();
 }
@@ -911,7 +1133,7 @@ $('#ovClose').addEventListener('click', closeOverlay);
 $('#ovNext').addEventListener('click', closeOverlay);
 
 /* ---------- routing ---------- */
-const PAGES = ['start', 'home', 'principle', 'experiment', 'transfusion', 'genetics', 'quiz'];
+const PAGES = ['start', 'home', 'principle', 'experiment', 'transfusion', 'genetics', 'quiz', 'molecule', 'antibody', 'popgen', 'typing', 'bank'];
 function route() {
   let page = (location.hash || '').slice(1);
   if (!mode) page = 'start';
@@ -1645,6 +1867,439 @@ function renderQuiz() {
   };
 }
 
+/* ======================================================
+   GIFTED MODE (과고생) — undergraduate-level levels
+   ====================================================== */
+
+/* ---------- G1. glycan synthesis ---------- */
+const SNFG = {
+  GlcNAc: (x, y) => `<rect x="${x - 11}" y="${y - 11}" width="22" height="22" fill="#2E6FD8" stroke="${COL.ink}" stroke-width="2"/>`,
+  Gal:    (x, y) => `<circle cx="${x}" cy="${y}" r="12" fill="#FFD400" stroke="${COL.ink}" stroke-width="2"/>`,
+  GalNAc: (x, y) => `<rect x="${x - 11}" y="${y - 11}" width="22" height="22" fill="#FFD400" stroke="${COL.ink}" stroke-width="2"/>`,
+  Fuc:    (x, y) => `<path d="M${x} ${y - 13}L${x + 13} ${y + 10}H${x - 13}z" fill="#E3242B" stroke="${COL.ink}" stroke-width="2" stroke-linejoin="round"/>`,
+};
+const MO_ROUNDS = [
+  { h: 'H/H', abo: 'A/O' }, { h: 'H/h', abo: 'B/B' }, { h: 'h/h', abo: 'A/B' },
+  { h: 'H/H', abo: 'O/O' }, { h: 'H/h', abo: 'A/B' },
+];
+const mo = { order: [], i: 0, chains: [], applied: new Set(), correct: 0, stage: 'enz', fresh: null };
+const moHas = r => ({ FUT1: r.h.includes('H'), GTA: r.abo.includes('A'), GTB: r.abo.includes('B') });
+const moPheno = r => { const e = moHas(r); return !e.FUT1 ? 'Oh' : e.GTA && e.GTB ? 'AB' : e.GTA ? 'A' : e.GTB ? 'B' : 'O'; };
+const PHENO_NAME = { A: 'A형', B: 'B형', AB: 'AB형', O: 'O형', Oh: '봄베이 (Oh)' };
+function moStart() { mo.order = shuffle(MO_ROUNDS); mo.i = 0; mo.correct = 0; moRound(); }
+function moRound() {
+  const r = mo.order[mo.i];
+  mo.chains = [{ fuc: false, term: null }, { fuc: false, term: null }];
+  mo.applied = new Set(); mo.stage = 'enz'; mo.fresh = null;
+  $('#moScore').textContent = `시료 ${mo.i + 1} / ${mo.order.length} · 정답 ${mo.correct}`;
+  $('#moGeno').innerHTML = `<span class="pill">FUT1 <b>${r.h}</b></span> <span class="pill">ABO <b>${r.abo}</b></span>
+    <span class="small muted">(h = 비기능 FUT1, O = c.261delG)</span>`;
+  $('#moEnz').innerHTML = [['FUT1', 'FUT1 · α1,2-FucT'], ['GTA', 'GTA · +GalNAc'], ['GTB', 'GTB · +Gal'], ['done', '✅ 합성 완료']]
+    .map(([k, l]) => `<button class="btn ${k === 'done' ? 'primary' : ''}" data-e="${k}">${l}</button>`).join('');
+  $('#moAsk').hidden = true; $('#moNext').hidden = true; $('#moMsg').innerHTML = '';
+  moDraw();
+}
+function moDraw() {
+  let h = `<rect width="340" height="230" fill="#fff"/>`;
+  mo.chains.forEach((c, i) => {
+    const y = 58 + i * 108;
+    h += `<text x="12" y="${y + 5}" font-family="Jua" font-size="14" fill="${COL.ink}">R</text>
+      <path d="M26 ${y}H260" stroke="${COL.ink}" stroke-width="2.5" fill="none" stroke-dasharray="${c.term ? '0' : '0'}"/>`;
+    h += `<path d="M150 ${y}V${y + 40}" stroke="${COL.ink}" stroke-width="2.5" opacity="${c.fuc ? 1 : 0}"/>`;
+    h += `<text x="104" y="${y - 16}" text-anchor="middle" font-size="11" fill="${COL.ink}">β1-4</text>`;
+    h += SNFG.GlcNAc(70, y) + SNFG.Gal(150, y);
+    if (c.fuc) h += `<g class="${mo.fresh === 'FUT1' ? 'pop' : ''}"><text x="160" y="${y + 26}" font-size="11" fill="${COL.ink}">α1-2</text>${SNFG.Fuc(150, y + 44)}</g>`;
+    if (c.term) h += `<g class="${mo.fresh === c.term ? 'pop' : ''}"><text x="190" y="${y - 16}" text-anchor="middle" font-size="11" fill="${COL.ink}">α1-3</text>${SNFG[c.term === 'GalNAc' ? 'GalNAc' : 'Gal'](230, y)}</g>`;
+    else h += `<rect x="215" y="${y - 15}" width="30" height="30" rx="6" fill="none" stroke="#bbb" stroke-dasharray="4 3"/>`;
+    const name = !c.fuc ? '전구체 (type 2)' : !c.term ? 'H 항원' : c.term === 'GalNAc' ? 'A 항원' : 'B 항원';
+    h += `<text x="330" y="${y + 5}" text-anchor="end" font-family="Jua" font-size="15" fill="${COL.accent || '#A23E55'}">${name}</text>`;
+  });
+  $('#moSvg').innerHTML = h;
+}
+function moMsg(cls, html) { $('#moMsg').innerHTML = `<div class="feedback ${cls}">${html}</div>`; }
+$('#moEnz').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || mo.stage !== 'enz') return;
+  const r = mo.order[mo.i], has = moHas(r), k = b.dataset.e;
+  if (k === 'done') {
+    const needed = ['FUT1', 'GTA', 'GTB'].filter(x => has[x] && (x === 'FUT1' || has.FUT1));
+    const missing = needed.filter(x => !mo.applied.has(x));
+    if (missing.length) { sfx.mismatch(); moMsg('no', `<b>아직이에요!</b> 이 유전자형에서 작용해야 할 효소가 남아 있어요.`); return; }
+    mo.stage = 'ask'; sfx.tap();
+    $('#moPheno').innerHTML = Object.entries(PHENO_NAME).map(([v, n]) => `<button class="btn" data-p="${v}">${n}</button>`).join('');
+    $('#moAsk').hidden = false; $('#moMsg').innerHTML = '';
+    return;
+  }
+  if (mo.applied.has(k)) { toast('이미 반응이 끝났어요'); return; }
+  if (!has[k]) {
+    sfx.mismatch();
+    moMsg('no', k === 'FUT1'
+      ? `<b>FUT1 없음!</b> h/h는 FUT1 두 개가 모두 기능을 잃은 상태라 α1,2-푸코스전이효소가 만들어지지 않아요.`
+      : `<b>${k} 없음!</b> ABO 유전자형 ${r.abo}에는 ${k === 'GTA' ? 'A' : 'B'} 대립유전자가 없어요. ${r.abo.includes('O') ? 'O 대립유전자는 c.261delG 틀이동 때문에 효소 활성이 없어요.' : ''}`);
+    return;
+  }
+  if (k !== 'FUT1' && !mo.chains[0].fuc) {
+    if (!has.FUT1) {
+      mo.applied.add(k); sfx.tap();
+      moMsg('ok', `<b>${k}는 있지만 일을 못 해요.</b> ${k}는 <code>Fucα1-2Gal</code>(H 항원)만 수용체로 인식하는데, hh라서 H 항원이 없어요. ${k === 'GTA' ? 'UDP-GalNAc' : 'UDP-Gal'}만 남아 있어요.`);
+      return;
+    }
+    sfx.mismatch();
+    moMsg('no', `<b>순서가 틀렸어요!</b> GTA와 GTB의 수용체는 <code>Fucα1-2Galβ-R</code>, 즉 H 항원이에요. 먼저 FUT1이 푸코스를 붙여야 해요.`);
+    return;
+  }
+  mo.applied.add(k); mo.fresh = k;
+  if (k === 'FUT1') mo.chains.forEach(c => { c.fuc = true; });
+  else {
+    const sugar = k === 'GTA' ? 'GalNAc' : 'Gal';
+    const targets = has.GTA && has.GTB ? [mo.chains[k === 'GTA' ? 0 : 1]] : mo.chains;
+    targets.forEach(c => { c.term = sugar; });
+    mo.fresh = sugar;
+  }
+  sfx.match(); moDraw();
+  moMsg('ok', k === 'FUT1'
+    ? `<code>GDP-Fuc + Galβ-R → Fucα1-2Galβ-R (H) + GDP</code>`
+    : k === 'GTA' ? `<code>UDP-GalNAc + H → GalNAcα1-3(Fucα1-2)Galβ-R (A) + UDP</code>`
+    : `<code>UDP-Gal + H → Galα1-3(Fucα1-2)Galβ-R (B) + UDP</code>`);
+});
+$('#moPheno').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || mo.stage !== 'ask') return;
+  mo.stage = 'answered';
+  const r = mo.order[mo.i], ans = moPheno(r), ok = b.dataset.p === ans;
+  if (ok) mo.correct++;
+  ok ? sfx.ok() : sfx.no();
+  $$('#moPheno button').forEach(x => { x.disabled = x !== b; });
+  const why = ans === 'Oh' ? '정검사로는 O형처럼 보이지만, H 항원조차 없는 <b>봄베이</b>예요. 혈장에 항H가 있어서 일반 O형 혈액도 수혈받을 수 없어요.'
+    : ans === 'O' ? 'H 항원만 남은 O형이에요. 그래서 H 항원 양이 가장 많아요.'
+    : `말단 당이 ${ans === 'A' ? 'GalNAc → A 항원' : ans === 'B' ? 'Gal → B 항원' : 'GalNAc과 Gal 두 가지 → A와 B 항원 공존'}이에요.`;
+  moMsg(ok ? 'ok' : 'no', `<h3>${ok ? '정답!' : '오답!'} ${PHENO_NAME[ans]}</h3>${why}`);
+  $('#moScore').textContent = `시료 ${mo.i + 1} / ${mo.order.length} · 정답 ${mo.correct}`;
+  $('#moNext').hidden = false;
+  $('#moNext').textContent = mo.i + 1 < mo.order.length ? '다음 시료 ▶' : '결과 보기 ▶';
+});
+$('#moNext').addEventListener('click', () => {
+  if (mo.i + 1 < mo.order.length) { mo.i++; moRound(); return; }
+  $('#moNext').hidden = true;
+  const pass = mo.correct >= 4;
+  moMsg(pass ? 'ok' : 'no', `<h3>${mo.correct} / ${mo.order.length}</h3>${pass ? '당 사슬 합성 마스터!' : '4개 이상 맞히면 통과예요.'}
+    <div style="margin-top:10px"><button class="btn" id="moAgain">🔄 다시 하기</button></div>`);
+  $('#moAgain').onclick = moStart;
+  if (pass) giveStamp('molecule');
+});
+
+/* ---------- G2. IgM / IgG agglutination physics ---------- */
+const AB_CELLS = [{ n: 'A형 RhD+', A: 1, D: 1 }, { n: 'A형 RhD−', A: 1, D: 0 }, { n: 'O형 RhD+', A: 0, D: 1 }, { n: 'O형 RhD−', A: 0, D: 0 }];
+const AB_ABS = { IgM: { n: 'IgM 항A', k: 'IgM', t: 'A', span: 30 }, IgG: { n: 'IgG 항D', k: 'IgG', t: 'D', span: 13 } };
+const AB_MED = { saline: { n: '생리식염수', k: 'saline', gap: 25 }, enzyme: { n: '효소(파파인) 처리 세포', k: 'enzyme', gap: 11 }, ahg: { n: '세척 후 AHG(쿰스 시약) 첨가', k: 'ahg', gap: 25 } };
+const abAgg = c => !!c.cell[c.ab.t] && (c.ab.k === 'IgM' || c.med.k !== 'saline');
+const abState = { rounds: [], i: 0, correct: 0, answered: false };
+function abStart() {
+  const withAg = t => rand(AB_CELLS.filter(c => c[t]));
+  const without = t => rand(AB_CELLS.filter(c => !c[t]));
+  abState.rounds = shuffle([
+    { ab: AB_ABS.IgG, med: AB_MED.saline, cell: withAg('D') },
+    { ab: AB_ABS.IgG, med: AB_MED.ahg, cell: withAg('D') },
+    { ab: AB_ABS.IgG, med: AB_MED.enzyme, cell: withAg('D') },
+    { ab: AB_ABS.IgM, med: AB_MED.saline, cell: withAg('A') },
+    { ab: AB_ABS.IgG, med: AB_MED.ahg, cell: without('D') },
+    { ab: AB_ABS.IgM, med: rand(Object.values(AB_MED)), cell: without('A') },
+  ]);
+  abState.i = 0; abState.correct = 0; abRound();
+}
+function abRound() {
+  const c = abState.rounds[abState.i];
+  abState.answered = false;
+  $('#abScore').textContent = `문제 ${abState.i + 1} / 6 · 정답 ${abState.correct}`;
+  $('#abCond').innerHTML = `<span class="pill">항체: <b>${c.ab.n}</b></span> <span class="pill">적혈구: <b>${c.cell.n}</b></span> <span class="pill">조건: <b>${c.med.n}</b></span>`;
+  $$('#abPick button').forEach(b => { b.disabled = false; b.classList.remove('sel'); });
+  $('#abMsg').innerHTML = ''; $('#abNext').hidden = true;
+  abDraw(c, false);
+}
+function igG(x1, y, x2, col = COL.ink) {
+  // Fab fork at x1 (bound to antigen), Fc tail toward x2
+  const d = Math.sign(x2 - x1);
+  return `<g stroke="${col}" stroke-width="4" stroke-linecap="round" fill="none"><path d="M${x1 + d * 22} ${y}H${x2}"/><path d="M${x1} ${y - 10}L${x1 + d * 22} ${y}L${x1} ${y + 10}"/></g>`;
+}
+function abDraw(c, reveal) {
+  const S = 10, xL = 170 - c.med.gap * S / 2, xR = 170 + c.med.gap * S / 2, mid = 170;
+  const t = c.ab.t, has = c.cell[t];
+  let h = `<rect width="340" height="210" fill="#fff"/>`;
+  h += `<rect x="${xL - 28}" y="26" width="28" height="160" fill="#E89AA6" stroke="${COL.ink}" stroke-width="2"/><rect x="${xR}" y="26" width="28" height="160" fill="#E89AA6" stroke="${COL.ink}" stroke-width="2"/>
+    <text x="${xL - 14}" y="110" text-anchor="middle" font-size="10" fill="${COL.ink}" transform="rotate(-90 ${xL - 14} 110)">적혈구 막</text><text x="${xR + 14}" y="110" text-anchor="middle" font-size="10" fill="${COL.ink}" transform="rotate(90 ${xR + 14} 110)">적혈구 막</text>`;
+  [55, 105, 155].forEach(y => {
+    if (has) {
+      const mk = (x, dir) => t === 'A'
+        ? `<path d="M${x} ${y - 6}L${x + dir * 9} ${y}L${x} ${y + 6}z" fill="${COL.A}" stroke="${COL.ink}" stroke-width="1"/>`
+        : `<path d="M${x} ${y - 6}L${x + dir * 6} ${y}L${x} ${y + 6}L${x - dir * 0} ${y}z" fill="#2E8B57" stroke="${COL.ink}" stroke-width="1"/>`;
+      h += mk(xL, 1) + mk(xR, -1);
+    }
+  });
+  // gap ruler
+  h += `<path d="M${xL} 200H${xR}" stroke="${COL.ink}" stroke-width="1.5"/><path d="M${xL} 195V205M${xR} 195V205" stroke="${COL.ink}" stroke-width="1.5"/>
+    <text x="${mid}" y="196" text-anchor="middle" font-size="11" fill="${COL.ink}">세포 간 거리 ≈ ${c.med.gap} nm</text>`;
+  if (!reveal) {
+    h += `<text x="${mid}" y="112" text-anchor="middle" font-family="Jua" font-size="34" fill="#A23E55">?</text>`;
+    $('#abSvg').innerHTML = h; return;
+  }
+  const green = '#2E8B57', red = '#C0392B';
+  if (!has) {
+    h += c.ab.k === 'IgM'
+      ? `<g transform="translate(${mid} 100)">${[0, 72, 144, 216, 288].map(a => `<path d="M0 0L${Math.cos(a * Math.PI / 180) * 26} ${Math.sin(a * Math.PI / 180) * 26}" stroke="#888" stroke-width="4"/>`).join('')}<circle r="7" fill="#888"/></g>`
+      : igG(mid - 40, 100, mid + 40, '#888');
+    h += `<text x="${mid}" y="17" text-anchor="middle" font-family="Jua" font-size="14" fill="${red}">결합할 항원 없음</text>`;
+  } else if (c.ab.k === 'IgM') {
+    const r = (xR - xL) / 2;
+    h += `<g transform="translate(${mid} 105)" stroke="${green}" stroke-width="4" stroke-linecap="round">
+      <path d="M0 0L${-r} 0"/><path d="M0 0L${r} 0"/><path d="M0 0L-14 -26"/><path d="M0 0L14 -26"/><path d="M0 0L0 28"/><circle r="8" fill="${green}"/></g>
+      <text x="${mid}" y="17" text-anchor="middle" font-family="Jua" font-size="14" fill="${green}">IgM 오량체 (~30 nm) 가 직접 가교!</text>`;
+  } else if (c.med.k === 'saline') {
+    const reach = c.ab.span * S;
+    h += igG(xL, 75, xL + reach) + igG(xR, 135, xR - reach);
+    h += `<path d="M${xL + reach + 4} 75H${xR - 4}" stroke="${red}" stroke-width="2" stroke-dasharray="4 4"/>
+      <text x="${(xL + reach + xR) / 2}" y="66" text-anchor="middle" font-size="11" fill="${red}">${c.med.gap - c.ab.span} nm 부족</text>
+      <text x="${mid}" y="17" text-anchor="middle" font-family="Jua" font-size="14" fill="${red}">감작만 되고 가교 실패</text>`;
+  } else if (c.med.k === 'enzyme') {
+    h += igG(xL, 105, xR, green);
+    h += `<text x="${mid}" y="17" text-anchor="middle" font-family="Jua" font-size="13" fill="${green}">거리 감소 → IgG 가교</text>`;
+  } else {
+    const reach = c.ab.span * S;
+    h += igG(xL, 85, xL + reach) + igG(xR, 125, xR - reach);
+    const ax = (xL + reach + xR - reach) / 2;
+    h += `<path d="M${xL + reach} 85L${ax} 105L${xR - reach} 125" stroke="${green}" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <circle cx="${ax}" cy="105" r="6" fill="${green}"/>
+      <text x="${mid}" y="17" text-anchor="middle" font-family="Jua" font-size="13" fill="${green}">AHG(항-IgG)가 Fc–Fc 연결</text>`;
+  }
+  $('#abSvg').innerHTML = h;
+}
+$('#abPick').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || abState.answered) return;
+  abState.answered = true;
+  const c = abState.rounds[abState.i], agg = abAgg(c), ok = (b.dataset.v === '1') === agg;
+  if (ok) abState.correct++;
+  ok ? sfx.ok() : sfx.no();
+  $$('#abPick button').forEach(x => { x.disabled = x !== b; x.classList.toggle('sel', x === b); });
+  abDraw(c, true);
+  const has = c.cell[c.ab.t];
+  const why = !has ? `${c.cell.n} 적혈구에는 표적 항원 <b>${c.ab.t}</b>가 없어요. 그래서 조건과 상관없이 항체가 결합할 곳이 없어요.`
+    : c.ab.k === 'IgM' ? `IgM 오량체는 약 30 nm까지 뻗어서 세포 사이 거리(약 ${c.med.gap} nm)를 이어 줘요. 그래서 식염수에서도 <b>직접 응집</b>해요(식염수 응집소).`
+    : c.med.k === 'saline' ? `IgG(약 13 nm)는 제타 전위로 생긴 약 25 nm 거리를 잇지 못해요. 세포에 붙기만 하는 <b>감작</b> 상태라 응집은 없어요. 하지만 세포는 IgG로 덮여 있어서 AHG를 넣으면 양성이 돼요.`
+    : c.med.k === 'enzyme' ? `파파인이 시알산이 많은 글리코포린을 잘라내서 제타 전위가 낮아지고 세포 사이가 가까워져요(약 ${c.med.gap} nm). 그래서 IgG도 가교할 수 있어요. Rh 항체 검출에 효소법을 쓰는 이유예요.`
+    : `세척으로 남아 있는 혈청 IgG를 없앤 뒤 AHG를 넣으면, AHG가 서로 다른 세포에 붙은 IgG의 Fc를 이어 줘요. 이것이 <b>간접 항글로불린 검사(IAT)</b>의 원리예요.`;
+  $('#abMsg').innerHTML = `<div class="feedback ${ok ? 'ok' : 'no'}"><h3>${ok ? '정답!' : '오답!'} 응집 ${agg ? '○' : '×'}</h3>${why}</div>`;
+  $('#abScore').textContent = `문제 ${abState.i + 1} / 6 · 정답 ${abState.correct}`;
+  $('#abNext').hidden = false;
+  $('#abNext').textContent = abState.i < 5 ? '다음 ▶' : '결과 보기 ▶';
+});
+$('#abNext').addEventListener('click', () => {
+  if (abState.i < 5) { abState.i++; abRound(); return; }
+  $('#abNext').hidden = true;
+  const pass = abState.correct >= 5;
+  $('#abMsg').innerHTML = `<div class="feedback ${pass ? 'ok' : 'no'}"><h3>${abState.correct} / 6</h3>${pass ? '응집 물리학 통과!' : '5개 이상 맞혀야 통과예요.'}
+    <div style="margin-top:10px"><button class="btn" id="abAgain">🔄 다시 하기</button></div></div>`;
+  $('#abAgain').onclick = abStart;
+  if (pass) giveStamp('antibody');
+});
+
+/* ---------- G3. population genetics ---------- */
+const PG_T = { A: .34, B: .27, AB: .11, O: .28 };
+const PG_EST = (() => { const r = Math.sqrt(PG_T.O), q = 1 - Math.sqrt(PG_T.A + PG_T.O), p = 1 - Math.sqrt(PG_T.B + PG_T.O); return { p, q, r }; })();
+const pgFreq = (p, q, r) => ({ A: p * p + 2 * p * r, B: q * q + 2 * q * r, AB: 2 * p * q, O: r * r });
+const PG_QS = (() => {
+  const { p, q, r } = PG_EST;
+  const pAO = 2 * p * r / (p * p + 2 * p * r);
+  const giveA = (p * p + p * r) / (p * p + 2 * p * r), giveB = (q * q + q * r) / (q * q + 2 * q * r);
+  return [
+    { q: 'A형 부모 두 사람(서로 무관) 사이의 자녀가 O형일 확률은? (%)', ans: pAO * pAO / 4 * 100,
+      sol: `P(AO|A) = 2pr/(p²+2pr) ≈ ${pAO.toFixed(3)}. 두 부모가 모두 AO이고 각자 O를 물려줘야 하므로 → ${pAO.toFixed(3)}² × ¼ ≈ <b>${(pAO * pAO / 4 * 100).toFixed(1)}%</b>` },
+    { q: 'A형 아버지와 B형 어머니 사이의 자녀가 AB형일 확률은? (%)', ans: giveA * giveB * 100,
+      sol: `P(A형이 A를 물려줌) = (p²+pr)/(p²+2pr) ≈ ${giveA.toFixed(3)}, P(B형이 B를 물려줌) = (q²+qr)/(q²+2qr) ≈ ${giveB.toFixed(3)} → 곱 ≈ <b>${(giveA * giveB * 100).toFixed(1)}%</b>` },
+  ];
+})();
+const pg = { fit: false, solved: [false, false], tries: [0, 0] };
+function pgUpdate() {
+  const p = +$('#pgP').value, q = +$('#pgQ').value, r = 1 - p - q;
+  $('#pgPv').textContent = p.toFixed(3); $('#pgQv').textContent = q.toFixed(3);
+  if (r < 0) {
+    $('#pgR').innerHTML = `<b style="color:var(--no)">r = 1 − p − q 가 음수예요! p와 q를 줄이세요.</b>`;
+    $('#pgBars').innerHTML = ''; return;
+  }
+  $('#pgR').innerHTML = `r (O) = 1 − p − q = <b>${r.toFixed(3)}</b>`;
+  const f = pgFreq(p, q, r);
+  let maxD = 0;
+  $('#pgBars').innerHTML = TYPE_KEYS.map(k => {
+    const d = Math.abs(f[k] - PG_T[k]) * 100; maxD = Math.max(maxD, d);
+    return `<div class="bar pg"><span>${k}형</span><div class="track"><div class="fill" style="width:${f[k] * 100 / .5}%;background:${d <= 1 ? '#2E8B57' : 'var(--accent)'}"></div><i class="tgt" style="left:${PG_T[k] * 100 / .5}%"></i></div><span>${(f[k] * 100).toFixed(1)}%</span></div>`;
+  }).join('') + `<p class="small muted" style="margin:4px 0 0">▏검은 선 = 목표(한국인) · 최대 오차 <b>${maxD.toFixed(2)}%p</b></p>`;
+  if (maxD <= 1 && !pg.fit) {
+    pg.fit = true; sfx.match();
+    $('#pgFit').innerHTML = `<div class="feedback ok"><h3>분포 재현 성공! 🎯</h3>Bernstein 추정값: p ≈ ${PG_EST.p.toFixed(3)}, q ≈ ${PG_EST.q.toFixed(3)}, r ≈ ${PG_EST.r.toFixed(3)} (합 ${(PG_EST.p + PG_EST.q + PG_EST.r).toFixed(3)})</div>`;
+    pgCheck();
+  }
+}
+function pgRenderQs() {
+  $('#pgQs').innerHTML = PG_QS.map((x, i) => `<div class="calc-q" data-i="${i}">
+    <p style="margin:8px 0 4px"><b>Q${i + 1}.</b> ${x.q}</p>
+    <div class="btn-row" style="align-items:center"><input type="number" step="0.1" inputmode="decimal" placeholder="예: 12.3"> <span>%</span>
+    <button class="btn" data-a="check">확인</button></div><div class="out"></div></div>`).join('');
+}
+$('#pgQs').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const box = b.closest('.calc-q'), i = +box.dataset.i, x = PG_QS[i];
+  if (b.dataset.a === 'show') { box.querySelector('.out').innerHTML = `<div class="feedback no">${x.sol}</div>`; return; }
+  const v = parseFloat(box.querySelector('input').value);
+  if (isNaN(v)) { toast('숫자를 입력하세요'); return; }
+  const ok = Math.abs(v - x.ans) <= 1.0;
+  pg.tries[i]++;
+  ok ? sfx.ok() : sfx.no();
+  if (ok) pg.solved[i] = true;
+  box.querySelector('.out').innerHTML = ok ? `<div class="feedback ok"><h3>정답!</h3>${x.sol}</div>`
+    : `<div class="feedback no">아쉬워요. 다시 계산해 보세요.${pg.tries[i] >= 2 ? ' <button class="btn" data-a="show" style="min-height:34px;padding:2px 10px">풀이 보기</button>' : ''}</div>`;
+  pgCheck();
+});
+function pgCheck() {
+  if (pg.fit && pg.solved.every(Boolean)) giveStamp('popgen');
+  else if (pg.solved.every(Boolean) && !pg.fit) toast('① 분포 재현도 성공해야 통과예요!');
+}
+['#pgP', '#pgQ'].forEach(s => $(s).addEventListener('input', pgUpdate));
+
+/* ---------- G4. forward / reverse typing discrepancies ---------- */
+const TY_CASES = [
+  { who: '성인 헌혈자', f: [4, 0, 3], r: [0, 4, 0], ans: 'A형 RhD+',
+    opts: ['A형 RhD+', 'B형 RhD+', 'A형 RhD−', 'AB형 RhD+'],
+    why: '정검사에서 항A와 항D만 양성이고, 역검사에서는 B 세포만 응집돼요(항B 존재). 두 결과가 거울상으로 일치하는 전형적인 A형 RhD+예요.' },
+  { who: '성인 환자', f: [0, 0, 0], r: [4, 4, 0], ans: 'O형 RhD−',
+    opts: ['O형 RhD−', 'O형 RhD+', 'AB형 RhD−', '봄베이 (Oh)'],
+    why: '항원이 없고, 항A·항B가 있어요. O 세포는 응집되지 않으니 항H는 없어요. 그래서 봄베이가 아니라 일반 O형이고, 항D 음성이라 RhD−예요.' },
+  { who: '성인 환자', f: [4, 4, 3], r: [0, 0, 0], ans: 'AB형 RhD+',
+    opts: ['AB형 RhD+', 'O형 RhD+', 'A형 RhD+', '검사 오류 — 재검'],
+    why: 'A, B 항원이 모두 있고 혈청에 동종항체가 없어요. 정검사와 역검사가 일치하는 AB형이에요.' },
+  { who: '인도계 성인 환자 · 수술 전 검사', f: [0, 0, 3], r: [4, 4, 4], ans: '봄베이 (Oh) RhD+',
+    opts: ['O형 RhD+', '봄베이 (Oh) RhD+', '한랭 자가항체 — 재검', 'AB형 RhD+'],
+    why: '정검사만 보면 O형 같지만 <b>O 세포까지 4+</b>로 응집돼요. O 세포에 가장 많은 H 항원에 대한 <b>항H</b>가 있다는 뜻이에요(자가 대조가 음성이라면 자가항체가 아니에요). 봄베이로 판정하고, 봄베이 혈액만 수혈할 수 있어요.' },
+  { who: '생후 3일 신생아', f: [4, 0, 3], r: [0, 0, 0], ans: 'A형 RhD+ (역검사 음성은 정상)',
+    opts: ['A형 RhD+ (역검사 음성은 정상)', 'AB형 RhD+', 'O형 RhD+', '판정 불가 — 시약 오류'],
+    why: '동종응집소는 생후 3–6개월부터 만들어져요. 신생아 혈장에 있는 IgG는 엄마에게서 온 것이에요. 그래서 4개월 미만 영아는 <b>정검사로만</b> 판정하고 역검사는 하지 않아요.' },
+  { who: '성인 환자', f: [4, 0, 3], r: [1, 4, 0], ans: 'A2형 + 항A1 항체',
+    opts: ['A2형 + 항A1 항체', 'AB형 RhD+', 'B형 + 항A', 'A형 + 동종항체 결손'],
+    why: '정검사는 A형인데 역검사에서 A1 세포가 약하게(1+) 응집돼요. A2 아형의 1–8%가 <b>항A1</b>을 만들어요. 렉틴 Dolichos biflorus(항A1)로 확인할 수 있어요. 수혈은 A2형이나 O형 적혈구로 해요.' },
+];
+const ty = { order: [], i: 0, correct: 0, answered: false };
+const grade = g => g ? g + '+' : '0';
+function tyStart() { ty.order = shuffle(TY_CASES); ty.i = 0; ty.correct = 0; tyRound(); }
+function tyRound() {
+  const c = ty.order[ty.i];
+  ty.answered = false;
+  $('#tyScore').textContent = `검체 ${ty.i + 1} / ${ty.order.length} · 정답 ${ty.correct}`;
+  const cell = g => `<td class="g${g}">${grade(g)}</td>`;
+  $('#tyCase').innerHTML = `<p class="jua" style="margin:0 0 6px">🧪 ${c.who}</p><div class="tbl-scroll"><table class="tbl typing">
+    <thead><tr><th colspan="3">정검사 (환자 적혈구 +)</th><th colspan="3">역검사 (환자 혈청 +)</th></tr>
+    <tr><th>항A</th><th>항B</th><th>항D</th><th>A1 세포</th><th>B 세포</th><th>O 세포</th></tr></thead>
+    <tbody><tr>${c.f.map(cell).join('')}${c.r.map(cell).join('')}</tr></tbody></table></div>`;
+  $('#tyOpts').innerHTML = shuffle(c.opts).map(o => `<button class="btn" data-o="${o}">${o}</button>`).join('');
+  $('#tyMsg').innerHTML = ''; $('#tyNext').hidden = true;
+}
+$('#tyOpts').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || ty.answered) return;
+  ty.answered = true;
+  const c = ty.order[ty.i], ok = b.dataset.o === c.ans;
+  if (ok) ty.correct++;
+  ok ? sfx.ok() : sfx.no();
+  $$('#tyOpts button').forEach(x => { x.disabled = x !== b && x.dataset.o !== c.ans; x.classList.toggle('sel', x.dataset.o === c.ans); });
+  $('#tyMsg').innerHTML = `<div class="feedback ${ok ? 'ok' : 'no'}"><h3>${ok ? '정답!' : '오답!'} ${c.ans}</h3>${c.why}</div>`;
+  $('#tyScore').textContent = `검체 ${ty.i + 1} / ${ty.order.length} · 정답 ${ty.correct}`;
+  $('#tyNext').hidden = false;
+  $('#tyNext').textContent = ty.i + 1 < ty.order.length ? '다음 검체 ▶' : '결과 보기 ▶';
+});
+$('#tyNext').addEventListener('click', () => {
+  if (ty.i + 1 < ty.order.length) { ty.i++; tyRound(); return; }
+  $('#tyNext').hidden = true; $('#tyOpts').innerHTML = ''; $('#tyCase').innerHTML = '';
+  const pass = ty.correct >= 5;
+  $('#tyMsg').innerHTML = `<div class="feedback ${pass ? 'ok' : 'no'}"><h3>${ty.correct} / ${ty.order.length}</h3>${pass ? '판독 실력 인정! 진단검사의학과 전공의 같아요.' : '5개 이상 맞혀야 통과예요.'}
+    <div style="margin-top:10px"><button class="btn" id="tyAgain">🔄 다시 하기</button></div></div>`;
+  $('#tyAgain').onclick = tyStart;
+  if (pass) giveStamp('typing');
+});
+
+/* ---------- G5. blood bank issuing ---------- */
+const BK_REQS = [
+  { pt: 'A', rh: '−', prod: 'RBC', note: '28세 여성 · 제왕절개 중 출혈' },
+  { pt: 'AB', rh: '+', prod: 'RBC', note: '60세 남성 · 상부 위장관 출혈' },
+  { pt: 'O', rh: '+', prod: 'FFP', note: '간경변 환자 · 응고인자 보충' },
+  { pt: 'B', rh: '+', prod: 'FFP', note: '응고인자 결핍 환자 · 응급 수술' },
+  { pt: '?', rh: '?', prod: 'RBC', note: '혈액형 미확인 · 20대 여성 다발성 외상' },
+  { pt: '?', rh: '?', prod: 'FFP', note: '혈액형 미확인 · 대량 출혈 프로토콜' },
+];
+const BK_RBC = ['A+', 'A−', 'B+', 'B−', 'AB+', 'AB−', 'O+', 'O−'];
+const BK_FFP = ['A', 'B', 'AB', 'O'];
+function bkOk(req, unit) {
+  if (req.prod === 'RBC') {
+    if (req.pt === '?') return unit === 'O−';
+    const abo = unit.slice(0, -1), rh = unit.slice(-1);
+    return canGive(abo, req.pt) && (req.rh === '+' || rh === '−');
+  }
+  if (req.pt === '?') return unit === 'AB';
+  return TYPES[unit].ab.every(a => !TYPES[req.pt].ag.includes(a));
+}
+const bk = { order: [], i: 0, correct: 0, picked: new Set(), done: false };
+function bkStart() { bk.order = shuffle(BK_REQS); bk.i = 0; bk.correct = 0; $('#bkSubmit').textContent = '📦 출고'; bkRound(); }
+function bkBag(label, plasma) {
+  return `<svg viewBox="0 0 64 80" aria-hidden="true"><path d="M28 2h8v8h-8z" fill="#ddd" stroke="${COL.ink}" stroke-width="2"/>
+    <rect x="8" y="10" width="48" height="62" rx="12" fill="#fff" stroke="${COL.ink}" stroke-width="2.5"/>
+    <rect x="12" y="30" width="40" height="38" rx="9" fill="${plasma ? '#F4C542' : '#C3253A'}"/>
+    <rect x="14" y="17" width="36" height="14" rx="4" fill="#fff" stroke="${COL.ink}" stroke-width="1.5"/>
+    <text x="32" y="28" text-anchor="middle" font-family="Jua" font-size="11" fill="${COL.ink}">${plasma ? 'FFP' : 'RBC'}</text></svg>`;
+}
+function bkRound() {
+  const r = bk.order[bk.i];
+  bk.picked = new Set(); bk.done = false;
+  $('#bkScore').textContent = `요청 ${bk.i + 1} / ${bk.order.length} · 완벽 출고 ${bk.correct}`;
+  $('#bkReq').innerHTML = `<div><div class="small muted">${r.note}</div>
+    <div class="big">${r.prod === 'RBC' ? '적혈구' : '신선동결혈장'} 요청</div>
+    <div>환자 혈액형: <b>${r.pt === '?' ? '미확인 (검사 결과 대기 중)' : `${r.pt}형${r.prod === 'RBC' ? ' RhD' + r.rh : ''}`}</b></div></div>`;
+  const units = r.prod === 'RBC' ? BK_RBC : BK_FFP;
+  $('#bkUnits').innerHTML = units.map(u => `<button class="bag" data-u="${u}" aria-pressed="false">${bkBag(u, r.prod === 'FFP')}<span class="t">${u}</span><span class="mark"></span></button>`).join('');
+  $('#bkMsg').innerHTML = ''; $('#bkSubmit').hidden = false; $('#bkNext').hidden = true;
+}
+$('#bkUnits').addEventListener('click', e => {
+  const b = e.target.closest('.bag'); if (!b || bk.done) return;
+  const u = b.dataset.u;
+  bk.picked.has(u) ? bk.picked.delete(u) : bk.picked.add(u);
+  b.setAttribute('aria-pressed', bk.picked.has(u)); sfx.tap();
+});
+$('#bkSubmit').addEventListener('click', () => {
+  if (bk.i === -1) { bkStart(); return; }
+  if (!bk.picked.size) { toast('출고할 제제를 하나 이상 고르세요'); return; }
+  bk.done = true;
+  const r = bk.order[bk.i];
+  let perfect = true;
+  $$('#bkUnits .bag').forEach(b => {
+    const ok = bkOk(r, b.dataset.u);
+    if (ok !== bk.picked.has(b.dataset.u)) perfect = false;
+    b.classList.add(ok ? 'res-ok' : 'res-no'); $('.mark', b).textContent = ok ? '○' : '×';
+  });
+  if (perfect) bk.correct++;
+  perfect ? sfx.ok() : sfx.no();
+  const right = (r.prod === 'RBC' ? BK_RBC : BK_FFP).filter(u => bkOk(r, u)).join(', ');
+  const why = r.pt === '?' ? (r.prod === 'RBC'
+      ? '혈액형을 모르면 어떤 환자 항체와도 반응하지 않는 <b>O형</b> 적혈구를 줘요. 가임기 여성이라 항D 감작을 피하려고 <b>RhD 음성</b>을 써요.'
+      : '혈장은 방향이 반대예요. 항A·항B가 모두 <b>없는 AB형 혈장</b>이 만능이에요.')
+    : r.prod === 'RBC'
+      ? `공여 적혈구 항원이 ${r.pt}형 환자의 항원 안에 들어가야 해요.${r.rh === '−' ? ' RhD 음성 가임기 여성이므로 <b>RhD 음성</b>만 줄 수 있어요.' : ' RhD 양성 환자는 RhD 양성과 음성 모두 받을 수 있어요(음성 혈액은 귀하니 아껴 쓰는 게 원칙이에요).'}`
+      : `공여 혈장의 항체가 ${r.pt}형 환자 적혈구의 항원(${TYPES[r.pt].ag.join(', ') || '없음'})과 반응하면 안 돼요.${r.pt === 'O' ? ' O형 환자는 항원이 없어서 모든 혈장을 받을 수 있어요.' : ''}`;
+  $('#bkMsg').innerHTML = `<div class="feedback ${perfect ? 'ok' : 'no'}"><h3>${perfect ? '완벽한 출고!' : '출고 오류!'} 정답: ${right}</h3>${why}</div>`;
+  $('#bkScore').textContent = `요청 ${bk.i + 1} / ${bk.order.length} · 완벽 출고 ${bk.correct}`;
+  $('#bkSubmit').hidden = true; $('#bkNext').hidden = false;
+  $('#bkNext').textContent = bk.i + 1 < bk.order.length ? '다음 요청 ▶' : '결과 보기 ▶';
+});
+$('#bkNext').addEventListener('click', () => {
+  if (bk.i + 1 < bk.order.length) { bk.i++; bkRound(); return; }
+  const pass = bk.correct >= 5;
+  $('#bkReq').innerHTML = `<div><div class="big">${pass ? '🏥 혈액은행 마스터!' : '💪 다시 도전!'}</div><div>완벽 출고 ${bk.correct} / ${bk.order.length}</div></div>`;
+  $('#bkUnits').innerHTML = ''; $('#bkMsg').innerHTML = '';
+  $('#bkNext').hidden = true; $('#bkSubmit').hidden = false; $('#bkSubmit').textContent = '🔄 다시 하기';
+  bk.i = -1;
+  if (pass) giveStamp('bank');
+});
+
 /* ---------- init ---------- */
 loadStamps();
 renderMute();
@@ -1656,6 +2311,12 @@ startTransfusion();
 renderPunnett();
 renderPuzzle();
 startQuiz();
+moStart();
+abStart();
+pgRenderQs();
+pgUpdate();
+tyStart();
+bkStart();
 route();
 })();
 </script>
